@@ -121,6 +121,23 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   font-display: swap;
 }
 
+/* Global styles */
+
+.button {
+  display: flex;
+  margin-top: 50px;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 30px;
+}
+
+
+/* __________________________________ */
+
 serif html {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
@@ -267,7 +284,7 @@ img {
  * 1. Change the font styles in all browsers.
  * 2. Remove the margin in Firefox and Safari.
  */
-button,
+/* button,
 input,
 optgroup,
 select,
@@ -276,6 +293,11 @@ textarea {
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
+} */
+
+button {
+  all: unset;
+  display: inline-block;
 }
 
 /**
@@ -620,7 +642,7 @@ a:active {
 
 /* Forms
 --------------------------------------------- */
-button,
+/* button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
@@ -698,7 +720,7 @@ select {
 
 textarea {
   width: 100%;
-}
+} */
 
 /*--------------------------------------------------------------
 # Layouts
@@ -1188,6 +1210,9 @@ body {
   font-weight: 800;
   color: var(--dark-text);
   text-decoration: none;
+  padding: 5px;
+  background: var(--primary-pink);
+  border-radius: 50px;
 }
 
 .logo-icon {
@@ -1325,6 +1350,9 @@ body {
 
 /* Home Section */
 
+.main-container {
+  display: flex;
+}
 
 .intro {
   min-height: 555px;
@@ -1336,8 +1364,6 @@ body {
   position: relative;
 }
 
-.intro-up {}
-
 
 .intro-wave {
   content: '';
@@ -1348,14 +1374,56 @@ body {
   width: 100%;
 }
 
-.intro-title {
+.intro-text {
   margin-top: 147px;
+}
+
+.intro-title {
   font-size: 45px;
   font-weight: 800;
   line-height: 53px;
   letter-spacing: -1.2px;
   text-transform: uppercase;
 }
+
+
+.intro-subtitle {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.button_intro-production {
+  margin-top: 50px;
+  background: #FDFCFA;
+  transition: var(--transition);
+}
+
+.button_intro-production:hover {
+  background: #b4b3b3;
+}
+
+.button-text {
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.intro-image {
+  content: '';
+  position: absolute;
+  right: 7vw;
+  bottom: -5vh;
+  z-index: 2;
+}
+
+
+
+
 
 
 /* _________________________________________________________ */
