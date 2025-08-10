@@ -1536,7 +1536,7 @@ body {
   position: absolute;
   content: url('./images/coffee-beans-icon.svg');
   left: -34px;
-  top: -1px;
+  top: -4px;
 }
 
 .inside_content-right-item-description {
@@ -1563,12 +1563,140 @@ body {
   letter-spacing: 0.5px;
 }
 
-
-
-
-
 /* __________________________ */
 
+
+/* Partners */
+
+.partners {
+  padding: 60px 0;
+}
+
+.partners_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.partners_content {
+  margin-top: 50px;
+}
+
+.partners_swiper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  height: 100%;
+}
+
+.swiper-slide {
+  padding: 40px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 30px;
+  border: 1px solid rgba(33, 33, 35, 0.10);
+  background: #FDFCFA;
+  box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
+}
+
+.swiper-slide img {
+  width: 115px;
+  height: 115px;
+  flex-shrink: 0;
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
+
+/* _________________ */
+
+
+/* Subscribe */
+
+.subscribe {
+  background-color: var(--primary-pink);
+}
+
+.container_subscribe {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.subscribe_content {
+  /* margin-left: 600px; */
+}
+
+.subscribe_left img {}
+
+.subscribe_left {
+  margin-left: -100px;
+  height: 100%;
+}
+
+.subscribe_right {
+  padding: 60px 0;
+}
+
+.subscribe_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 50px;
+  /* 132.5% */
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.button_subscribe {
+  background: #212123;
+  transition: var(--transition);
+}
+
+.button_subscribe:hover {
+  background: #6e6e70;
+}
+
+.button-subscribe-text {
+  color: #FDFCFA;
+  letter-spacing: 0.5px;
+}
+
+/* _____________________ */
 
 
 /* _________________________________________________________ */
@@ -1576,8 +1704,8 @@ body {
 .site-footer {
   background-color: #f8f9fa;
   border-top: 1px solid #e9ecef;
-  padding: 40px 0 20px;
-  margin-top: 60px;
+  /* padding: 40px 0 20px; */
+  /* margin-top: 60px; */
 }
 
 .footer-container {

@@ -89,6 +89,45 @@ get_header(); ?>
     </div>
     </div>
   </section>
+  <section class="partners">
+    <div class="container">
+      <div class="partners_title">НАШИ ПАРТНЕРЫ В РОССИИ,<br> ГЕРМАНИИ, КАЗАХСТАНЕ, БЕЛАРУСИ</div>
+      <div class="partners_content">
+        <div class="partners_swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 1">
+            </div>
+            <div class="swiper-slide">
+              <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 2">
+            </div>
+            <div class="swiper-slide">
+              <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 3">
+            </div>
+            <div class="swiper-slide">
+              <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 4">
+            </div>
+
+          </div>
+          <!-- Добавьте пагинацию и навигацию -->
+          <div class="swiper-pagination"></div>
+        </div>
+  </section>
+  <section class="subscribe">
+    <div class="container container_subscribe">
+      <div class="subscribe_left">
+        <img src="<?php echo get_template_directory_uri(); ?>./images/subscribe-bg.png">
+      </div>
+      <div class="subscribe_right">
+        <div class="subscribe_content">
+          <div class="subscribe_title">ВСЕ ПРОСТО - <br>ОФОРМИТЬ ПОДПИСКУ <br>GO BREW</div>
+          <button class="button button_subscribe">
+            <span class="button-text button-subscribe-text">Подписаться</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <?php the_content(); ?>
 </main>
