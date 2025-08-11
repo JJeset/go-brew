@@ -79,7 +79,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 @font-face {
   font-family: 'Montserrat';
   src: local('Montserrat ExtraBold'), local('Montserrat-ExtraBold'),
-    url('../fonts/Montserrat-ExtraBold.woff2') format('woff2');
+    url('./fonts/Montserrat-ExtraBold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -88,7 +88,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 @font-face {
   font-family: 'Montserrat';
   src: local('Montserrat Bold'), local('Montserrat-Bold'),
-    url('../fonts/Montserrat-Bold.woff2') format('woff2');
+    url('./fonts/Montserrat-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -97,7 +97,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 @font-face {
   font-family: 'Montserrat';
   src: local('Montserrat SemiBold'), local('Montserrat-SemiBold'),
-    url('../fonts/Montserrat-SemiBold.woff2') format('woff2');
+    url('./fonts/Montserrat-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -106,7 +106,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 @font-face {
   font-family: 'Montserrat';
   src: local('Montserrat Medium'), local('Montserrat-Medium'),
-    url('../fonts/Montserrat-Medium.woff2') format('woff2');
+    url('./fonts/Montserrat-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -115,7 +115,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 @font-face {
   font-family: 'Montserrat';
   src: local('Montserrat Regular'), local('Montserrat-Regular'),
-    url('../fonts/Montserrat-Regular.woff2') format('woff2');
+    url('./fonts/Montserrat-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -126,13 +126,14 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 .button {
   display: flex;
   margin-top: 50px;
-  padding: 8px 20px;
+  padding: 13px 24px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   gap: 10px;
   flex-shrink: 0;
   border-radius: 30px;
+  letter-spacing: 0.5px;
 }
 
 
@@ -159,9 +160,7 @@ body {
   color: var(--dark-text);
 }
 
-header {
-  letter-spacing: 0.5px;
-}
+header {}
 
 /**
  * Render the `main` element consistently in IE.
@@ -296,8 +295,9 @@ textarea {
 } */
 
 button {
-  all: unset;
+  /* all: unset; */
   display: inline-block;
+  border: none;
 }
 
 /**
@@ -794,6 +794,100 @@ textarea {
 }
 
 
+
+
+@media (max-width: 992px) {
+
+  .burger-icon {
+    display: flex;
+    z-index: 1001;
+    /* Выше чем меню */
+    position: relative;
+  }
+
+  .nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -25%;
+    height: 100%;
+    width: 150%;
+    border-radius: 30px;
+    padding: 10px 10px;
+    background: #b4b3b3;
+    transition: var(--transition);
+    opacity: 0;
+    z-index: -1;
+  }
+
+
+  .body--opened-menu .nav-menu {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+
+    gap: 30px;
+  }
+
+
+  .body--opened-menu .header-actions {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+
+  .body--opened-menu {
+    overflow: hidden;
+  }
+
+
+  .body--opened-menu .nav-menu {
+    position: fixed;
+    top: 84px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    padding: 30px 20px;
+    margin-bottom: 20px;
+  }
+
+  .body--opened-menu .nav-menu a {
+    display: block;
+    padding: 15px 0;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 16px;
+  }
+
+  .body--opened-menu .nav-menu a:last-child {
+    border-bottom: none;
+  }
+
+  .body--opened-menu .header-actions {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 0;
+    border-top: 1px solid #f0f0f0;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 20px;
+    z-index: 999;
+  }
+
+  .body--opened-menu .icon-after::after {
+    display: none;
+  }
+}
+
+
 /* --------------------------------------------------------------*/
 
 /* Navigation
@@ -1139,7 +1233,6 @@ body {
 }
 
 .top-bar-text {
-  letter-spacing: 0.9px;
   font-weight: 500;
   color: var(--dark-text);
 }
@@ -1259,20 +1352,17 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  s
+
 }
 
 .nav-menu {
-
+  display: flex;
   padding: 15px;
   background: var(--white);
   border-radius: 50px;
-
-  display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-
   z-index: 1000;
 }
 
@@ -1285,6 +1375,8 @@ body {
   transition: var(--transition);
   position: relative;
   padding: 10px 14px;
+  text-wrap: nowrap;
+
 }
 
 .nav-menu a:hover {
@@ -1311,6 +1403,7 @@ body {
 }
 
 .header-actions {
+  position: relative;
   padding: 15px 19px;
   background: var(--white);
   border-radius: 50px;
@@ -1318,6 +1411,7 @@ body {
   display: flex;
   gap: 44px;
   align-items: center;
+  z-index: 1000;
 }
 
 .header-actions-text {
@@ -1448,8 +1542,9 @@ body {
 .button-text {
   text-align: center;
   font-size: 14px;
-  letter-spacing: 0.5px;
   font-weight: 600;
+  line-height: 14px;
+  /* 100% */
   text-transform: uppercase;
 }
 
@@ -1599,7 +1694,6 @@ body {
 
 .button-inside-text {
   color: #FDFCFA;
-  letter-spacing: 0.5px;
 }
 
 /* __________________________ */
@@ -1615,7 +1709,6 @@ body {
   font-size: 40px;
   font-weight: 700;
   line-height: 53px;
-  letter-spacing: -0.5px;
   text-transform: uppercase;
 }
 
@@ -1718,7 +1811,6 @@ body {
 
 .button-subscribe-text {
   color: #FDFCFA;
-  letter-spacing: 0.5px;
 }
 
 /* _____________________ */
@@ -1795,7 +1887,6 @@ body {
 }
 
 .nav-menu-footer {
-  letter-spacing: 0.5px;
   gap: 12px;
 }
 
@@ -1806,7 +1897,6 @@ body {
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
-  letter-spacing: 0.9px;
 
   transition: var(--transition);
 }
@@ -1901,6 +1991,10 @@ body {
   flex-direction: column;
 }
 
+.footer-company-info-mobile {
+  display: none;
+}
+
 .company-info-item {
   display: flex;
   gap: 4px;
@@ -1945,6 +2039,11 @@ body {
   line-height: normal;
   letter-spacing: -5.4px;
   wrap: nowrap;
+  text-align: center;
+}
+
+.footer-gobrew-mobile {
+  display: none;
 }
 
 
@@ -2254,13 +2353,21 @@ RESPONSIVE DESIGN
 
 @media (max-width: 992px) {
 
+  .intro {
+    background-image: none;
+  }
+
   .burger-icon {
     display: flex;
   }
 
   .footer-main {
-    flex-direction: column;
     gap: 30px;
+  }
+
+  .nav-menu a::after {
+    left: -25%;
+    width: 150%;
   }
 
   .footer-nav {
@@ -2298,6 +2405,10 @@ RESPONSIVE DESIGN
   }
 
 
+  .footer-gobrew {
+    font-size: 150px;
+  }
+
   .nav-menu {
     position: absolute;
     top: 100%;
@@ -2326,12 +2437,50 @@ RESPONSIVE DESIGN
     opacity: 1;
     pointer-events: all;
   }
+
+  .why_us-item {
+    height: auto;
+  }
+
+  .inside_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .container_subscribe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    gap: 10px;
+  }
+
+  .subscribe_left {
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  .footer-legal-links {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
+
+
+
 
 @media (max-width: 768px) {
   .site-footer {
     padding: 30px 0 15px;
     margin-top: 40px;
+  }
+
+  .intro {
+    background-image: url(./images/intro-bg.png);
+    background-position: top;
   }
 
   .footer-container {
@@ -2362,12 +2511,103 @@ RESPONSIVE DESIGN
   }
 
 
+  .footer-gobrew {
+    font-size: 100px;
 
+  }
 
 
   .footer-content {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+
+
+  .top-bar-left span {
+    display: none;
+  }
+
+  .top-bar-right {
+    display: flex;
+    width: 100%;
+    justify-content: space-between
+  }
+
+
+
+  .intro-subtitle {
+    max-width: 350px;
+    line-height: 1.5;
+    font-size: 20px;
+  }
+
+  .main-container {
+    display: grid;
+  }
+
+  .button {
+    width: 100%;
+    padding: 13px 20px;
+  }
+
+  .button-text {
+    font-size: 16px;
+  }
+
+  .why_us-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .why_us-content {
+    grid-template-columns: auto;
+  }
+
+  .why_us-item {
+    max-width: none;
+  }
+
+  .footer-container {
+    padding: 0 20px;
+  }
+
+  .footer-company-info {
+    display: none;
+  }
+
+  .footer-company-info-mobile {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .footer-gobrew {
+    display: none;
+  }
+
+  .footer-gobrew-mobile {
+    display: flex;
+    text-align: start;
+    font-size: 48px;
+    line-height: 1.3;
+    color: #F2F3F4;
+    font-weight: 500;
+    letter-spacing: -5.4px;
+    wrap: nowrap;
+    text-align: center;
+  }
+
+  .footer-addresses {
+    display: none;
+  }
+
+  .footer-legal-links {
+    text-align: start;
   }
 }
 
@@ -2398,4 +2638,21 @@ RESPONSIVE DESIGN
   .company-info-value {
     font-size: 13px;
   }
+}
+
+
+@media (max-width: 768px) {
+  .intro_section {
+    margin-top: 0;
+  }
+
+  .intro-text {
+    margin-top: 607px;
+    padding-bottom: 50px;
+  }
+
+  .intro-image img {
+    display: none;
+  }
+
 }

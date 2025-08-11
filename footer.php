@@ -21,7 +21,19 @@
         <div class="footer-logo">
           <img class="footer-logo-img" src="<?php echo get_template_directory_uri(); ?>/images/logo.png">
         </div>
-
+        <div class="footer-company-info-mobile">
+          <div class="company-info-item">
+            ОГРН:
+            1061435052007
+          </div>
+          <div class="company-info-item">
+            ИНН:
+            1435176805
+          </div>
+        </div>
+        <div class="footer-gobrew-mobile">
+          GO BREW
+        </div>
         <div class="footer-addresses">
           <div class="address-item">
             <span class="address-label">Юридический адрес:</span>
@@ -33,6 +45,7 @@
             <span class="address-text">Москва, улица Проспект Мира 53 <br>строение 1, подъезд 1</span>
           </div>
         </div>
+
       </div>
 
       <!-- Navigation Sections -->
