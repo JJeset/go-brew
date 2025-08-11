@@ -364,13 +364,15 @@ add_filter('body_class', 'add_footer_body_class');
 
 function enqueue_swiper_scripts()
 {
-  // Подключаем CSS Swiper
+
+  wp_enqueue_script('go-brew-main', get_template_directory_uri() . '/js/main.js', array(), _S_VERSION, true);
+
   wp_enqueue_style('swiper-style', 'https://unpkg.com/swiper/swiper-bundle.min.css');
 
-  // Подключаем JS Swiper
+
   wp_enqueue_script('swiper-script', 'https://unpkg.com/swiper/swiper-bundle.min.js', array(), null, true);
 
-  // Добавляем скрипт инициализации
+
   wp_add_inline_script('swiper-script', '
         document.addEventListener("DOMContentLoaded", function() {
             var swiper = new Swiper(".partners_swiper", {
@@ -383,14 +385,14 @@ function enqueue_swiper_scripts()
                 },
                 breakpoints: {
                     0: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
-                    },
-                    768: {
                         slidesPerView: 2,
                         spaceBetween: 5
                     },
-                    1024: {
+                    920: {
+                        slidesPerView: 3,
+                        spaceBetween: 10
+                    },
+                    1200: {
                         slidesPerView: 4,
                         spaceBetween: 10
                     }

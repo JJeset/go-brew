@@ -93,7 +93,7 @@ get_header(); ?>
     <div class="container">
       <div class="partners_title">НАШИ ПАРТНЕРЫ В РОССИИ,<br> ГЕРМАНИИ, КАЗАХСТАНЕ, БЕЛАРУСИ</div>
       <div class="partners_content">
-        <div class="partners_swiper">
+        <div class="partners_swiper swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
               <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 1">
@@ -107,11 +107,11 @@ get_header(); ?>
             <div class="swiper-slide">
               <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 4">
             </div>
-
           </div>
-          <!-- Добавьте пагинацию и навигацию -->
-          <div class="swiper-pagination"></div>
+
         </div>
+      </div>
+    </div>
   </section>
   <section class="subscribe">
     <div class="container container_subscribe">

@@ -80,6 +80,9 @@
             </a>
           <?php endif; ?>
         </div><!-- .header-actions -->
+        <a class="burger-icon" href="#">
+          <span></span>
+        </a>
       </nav>
     </div>
   </header><!-- #masthead -->

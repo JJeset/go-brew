@@ -729,7 +729,72 @@ textarea {
 
 /*--------------------------------------------------------------
 # Components
---------------------------------------------------------------*/
+
+/* Burger */
+
+.burger-icon {
+  display: none;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+}
+
+.burger-icon span,
+.burger-icon span::after {
+  display: block;
+  width: 30px;
+  height: 3px;
+  border-radius: 100px;
+  background: var(--dark-text);
+  transition: var(--transition);
+}
+
+
+.burger-icon span::before {
+  display: block;
+  width: 15px;
+  height: 3px;
+  border-radius: 100px;
+  background: var(--dark-text);
+  transition: var(--transition);
+}
+
+.burger-icon span {
+  position: relative;
+}
+
+.burger-icon span::before,
+.burger-icon span::after {
+  content: '';
+  position: absolute;
+}
+
+.burger-icon span::before {
+  top: -8px;
+}
+
+.burger-icon span::after {
+  bottom: -8px;
+}
+
+.body--opened-menu .burger-icon span {
+  top: 0px;
+  transform: rotate(45deg);
+}
+
+.body--opened-menu .burger-icon span::before {
+  background: transparent;
+}
+
+.body--opened-menu .burger-icon span::after {
+  bottom: 0px;
+  transform: rotate(-90deg);
+}
+
+
+/* --------------------------------------------------------------*/
 
 /* Navigation
 --------------------------------------------- */
@@ -789,16 +854,6 @@ textarea {
   display: block;
 }
 
-@media screen and (min-width: 37.5em) {
-
-  .menu-toggle {
-    display: none;
-  }
-
-  .main-navigation ul {
-    display: flex;
-  }
-}
 
 .site-main .comment-navigation,
 .site-main .posts-navigation,
@@ -1164,38 +1219,16 @@ body {
 
 /* Main Header */
 .main-header {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
 
   background: transparent;
   padding: 20px 0;
-  z-index: 1000;
+  z-index: 1;
   transition: var(--transition);
 
 }
 
 
-.main-header.sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 15px 0;
-  animation: slideDown 0.3s ease;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
 
 .navbar {
   display: flex;
@@ -1214,6 +1247,7 @@ body {
   padding: 5px;
   background: var(--primary-pink);
   border-radius: 50px;
+  z-index: 1;
 }
 
 .logo-icon {
@@ -1355,6 +1389,10 @@ body {
   display: flex;
 }
 
+.intro_section {
+  margin-top: -125px;
+}
+
 .intro {
   min-height: 555px;
   height: 100%;
@@ -1389,6 +1427,7 @@ body {
 
 
 .intro-subtitle {
+  margin-top: 16px;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -1591,14 +1630,16 @@ body {
 }
 
 .swiper-wrapper {
+
   height: 100%;
 }
 
 .swiper-slide {
   padding: 40px 80px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 
   border-radius: 30px;
   border: 1px solid rgba(33, 33, 35, 0.10);
@@ -1606,41 +1647,22 @@ body {
   box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
 }
 
-.swiper-slide img {
-  width: 115px;
-  height: 115px;
-  flex-shrink: 0;
-}
-
-.swiper-pagination {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.swiper-wrapper .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 200px;
 }
 
-.swiper-button-prev {
-  left: 10px;
+
+.swiper-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-.swiper-button-next {
-  right: 10px;
-}
+.swiper-pagination {}
+
 
 
 /* _________________ */
@@ -1662,11 +1684,14 @@ body {
   /* margin-left: 600px; */
 }
 
-.subscribe_left img {}
+.subscribe_left img {
+  height: 100%;
+}
 
 .subscribe_left {
   margin-left: -100px;
   height: 100%;
+  margin-bottom: -7px;
 }
 
 .subscribe_right {
@@ -1922,88 +1947,6 @@ body {
   wrap: nowrap;
 }
 
-/* ==========================================
-   RESPONSIVE DESIGN
-   ========================================== */
-
-@media (max-width: 992px) {
-  .footer-main {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .footer-nav {
-    justify-content: flex-start;
-    gap: 40px;
-  }
-
-  .footer-company {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .site-footer {
-    padding: 30px 0 15px;
-    margin-top: 40px;
-  }
-
-  .footer-container {
-    padding: 0 15px;
-  }
-
-  .footer-nav {
-    flex-direction: column;
-    gap: 25px;
-  }
-
-  .footer-nav-column {
-    width: 100%;
-  }
-
-  .footer-legal-links {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-
-  .address-item {
-    gap: 3px;
-  }
-
-  .footer-social {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-main {
-    gap: 20px;
-  }
-
-  .footer-addresses {
-    gap: 12px;
-  }
-
-  .address-label,
-  .address-text {
-    font-size: 13px;
-  }
-
-  .footer-nav-title {
-    font-size: 15px;
-    margin-bottom: 12px;
-  }
-
-  .footer-nav-link {
-    font-size: 13px;
-  }
-
-  .company-info-label,
-  .company-info-value {
-    font-size: 13px;
-  }
-}
 
 /* ==========================================
    UTILITY CLASSES
@@ -2255,10 +2198,105 @@ footer {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .menu-toggle {
+
+/* ==========================================
+RESPONSIVE DESIGN
+========================================== */
+
+
+
+@media (max-width: 1300px) {
+  .intro {
+    background-position: 120%;
+  }
+
+  .intro-title {
+    font-size: 36px;
+  }
+
+  .footer-gobrew {
+    font-size: 200px;
+  }
+}
+
+
+@media (max-width: 1200px) {
+  .subscribe_right {
+    padding: 30px 0;
+  }
+
+  .button_subscribe {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .intro {
+    background-position: 170%;
+  }
+
+  .intro-title {
+    font-size: 36px;
+  }
+
+  .nav-menu li {
+    max-height: 26px;
+  }
+
+  .why_us-item {
+    padding: 10px;
+  }
+}
+
+
+
+
+
+@media (max-width: 992px) {
+
+  .burger-icon {
     display: flex;
   }
+
+  .footer-main {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .footer-nav {
+    justify-content: flex-start;
+    gap: 40px;
+  }
+
+  .footer-company {
+    max-width: 100%;
+  }
+
+  .intro-subtitle {
+    max-width: 250px;
+  }
+
+  .header-actions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
+
+  .header-actions.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
 
   .nav-menu {
     position: absolute;
@@ -2275,27 +2313,89 @@ footer {
     transition: var(--transition);
   }
 
+  .main-header {
+    background: var(--white);
+  }
+
+  .logo {
+    background-color: transparent;
+  }
+
   .nav-menu.active {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
   }
+}
 
-  .hero-grid,
-  .subscription-content {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 30px 0 15px;
+    margin-top: 40px;
   }
 
-  .features-grid {
-    grid-template-columns: 1fr;
+  .footer-container {
+    padding: 0 15px;
   }
 
-  .hero h1 {
-    font-size: 2rem;
+  .footer-nav {
+    flex-direction: column;
+    gap: 25px;
   }
+
+  .footer-nav-column {
+    width: 100%;
+  }
+
+  .footer-legal-links {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .address-item {
+    gap: 3px;
+  }
+
+  .footer-social {
+    justify-content: flex-start;
+  }
+
+
+
+
 
   .footer-content {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-main {
+    gap: 20px;
+  }
+
+  .footer-addresses {
+    gap: 12px;
+  }
+
+  .address-label,
+  .address-text {
+    font-size: 13px;
+  }
+
+  .footer-nav-title {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .footer-nav-link {
+    font-size: 13px;
+  }
+
+  .company-info-label,
+  .company-info-value {
+    font-size: 13px;
   }
 }
