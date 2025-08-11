@@ -402,3 +402,35 @@ function enqueue_swiper_scripts()
     ');
 }
 add_action('wp_enqueue_scripts', 'enqueue_swiper_scripts');
+
+
+
+function mytheme_breadcrumbs()
+{
+  // Ссылка на главную
+  $home_link = esc_url(home_url('/'));
+  $home_text = 'Главная';
+
+  if (is_front_page() || is_home()) {
+    echo '<nav class="breadcrumbs" aria-label="Хлебные крошки">';
+    echo '<a href="' . $home_link . '">' . esc_html($home_text) . '</a>';
+    echo '</nav>';
+    return;
+  }
+
+  echo '<nav class="breadcrumbs" aria-label="Хлебные крошки">';
+  echo '<a href="' . $home_link . '">' . esc_html($home_text) . '</a>';
+  echo ' &gt; ';
+
+  if (is_singular()) {
+    echo '<span>' . esc_html(get_the_title()) . '</span>';
+  } elseif (is_archive()) {
+    echo '<span>' . esc_html(get_the_archive_title()) . '</span>';
+  } elseif (is_search()) {
+    echo '<span>Результаты поиска: ' . esc_html(get_search_query()) . '</span>';
+  } else {
+    echo '<span>' . esc_html(wp_get_document_title()) . '</span>';
+  }
+
+  echo '</nav>';
+}
