@@ -22,6 +22,9 @@ if (! defined('_S_VERSION')) {
  */
 function go_brew_setup()
 {
+
+  // ресайз картинок
+  add_image_size('custom-article-thumb', 253, 153, true);
   /*
 		* Make theme available for translation.
 		* Translations can be filed in the /languages/ directory.
@@ -422,7 +425,10 @@ function mytheme_breadcrumbs()
   echo '<a href="' . $home_link . '">' . esc_html($home_text) . '</a>';
   echo ' &gt; ';
 
-  if (is_singular()) {
+  if (is_single() && get_post_type() === 'post') {
+    echo '   <a href="' . get_permalink(get_option('page_for_posts')) . '">Блог</a> &gt; ';
+    echo '<span>' . esc_html(get_the_title()) . '</span>';
+  } elseif (is_singular()) {
     echo '<span>' . esc_html(get_the_title()) . '</span>';
   } elseif (is_archive()) {
     echo '<span>' . esc_html(get_the_archive_title()) . '</span>';
@@ -472,88 +478,93 @@ function custom_articles_grid_shortcode($atts)
 
   ob_start();
 ?>
-<div class="custom-articles-grid columns-<?php echo esc_attr($atts['columns']); ?>">
-  <?php while ($query->have_posts()) : $query->the_post(); ?>
-  <div class="article-card">
-    <div class="article-content">
-      <div class="article-date">
-        <?php echo get_the_date('j M Y'); ?>
-      </div>
-      <h3 class="article-title">
-        <?php the_title(); ?>
-      </h3>
-      <div class="article-excerpt">
-        <?php
+
+
+
+  <div class="custom-articles-grid columns-<?php echo esc_attr($atts['columns']); ?>">
+    <?php while ($query->have_posts()) : $query->the_post(); ?>
+      <div class="article-card">
+        <div class="article-content">
+          <div class="article-date">
+            <?php echo get_the_date('j M Y'); ?>
+          </div>
+          <h3 class="article-title">
+            <?php the_title(); ?>
+          </h3>
+          <div class="article-excerpt">
+            <?php
             $excerpt = get_the_excerpt();
-            echo wp_trim_words($excerpt, 9, '...');
+            echo wp_trim_words($excerpt, 11, '...');
             ?>
-      </div>
-      <div class="article-meta">
-        <a href="<?php the_permalink(); ?>" class="read-more-btn">
-          ЧИТАТЬ ПОДРОБНЕЕ
-        </a>
-      </div>
-      <div class="article-image">
-        <?php if (has_post_thumbnail()) : ?>
-        <a href="<?php the_permalink(); ?>">
-          <?php the_post_thumbnail('medium', array('class' => 'article-thumb')); ?>
-        </a>
-        <?php else : ?>
-        <div class="no-image-placeholder">
-          <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.png" alt="<?php the_title(); ?>">
+          </div>
+          <div class="article-meta">
+            <a href="<?php the_permalink(); ?>" class="read-more-btn">
+              ЧИТАТЬ ПОДРОБНЕЕ
+            </a>
+          </div>
+          <div class="article-image">
+            <?php if (has_post_thumbnail()) : ?>
+              <a href="<?php the_permalink(); ?>">
+                <?php the_post_thumbnail('custom-article-thumb', array('class' => 'article-thumb')); ?>
+              </a>
+            <?php else : ?>
+              <div class="no-image-placeholder">
+                <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.png" alt="<?php the_title(); ?>">
+              </div>
+            <?php endif; ?>
+          </div>
         </div>
-        <?php endif; ?>
       </div>
-    </div>
+    <?php endwhile; ?>
   </div>
-  <?php endwhile; ?>
-</div>
 
-<?php if ($atts['show_load_more'] === 'true') : ?>
-<div class="load-more-container">
-  <button class="load-more-btn" data-page="1" data-max="<?php echo $query->max_num_pages; ?>">
-    ПОКАЗАТЬ ЕЩЕ
-  </button>
-</div>
-<?php endif; ?>
+  <?php if ($atts['show_load_more'] === 'true') : ?>
+    <div class="load-more-container">
+      <button class="load-more-btn button" data-page="1" data-max="<?php echo $query->max_num_pages; ?>">
+        ПОКАЗАТЬ ЕЩЕ
+      </button>
+    </div>
+  <?php endif; ?>
 
-<script>
-jQuery(document).ready(function($) {
-  $('.load-more-btn').on('click', function() {
-    var button = $(this);
-    var page = button.data('page');
-    var max = button.data('max');
 
-    if (page >= max) {
-      button.hide();
-      return;
-    }
 
-    $.ajax({
-      url: '<?php echo admin_url("admin-ajax.php"); ?>',
-      type: 'POST',
-      data: {
-        action: 'load_more_articles',
-        page: page + 1,
-        posts_per_page: <?php echo $atts['posts_per_page']; ?>,
-        category: '<?php echo $atts['category']; ?>'
-      },
-      success: function(response) {
-        if (response) {
-          $('.custom-articles-grid').append(response);
-          button.data('page', page + 1);
+  <script>
+    jQuery(document).ready(function($) {
+      $('.load-more-btn').on('click', function() {
+        var button = $(this);
+        var page = button.data('page');
+        var max = button.data('max');
 
-          if (page + 1 >= max) {
-            button.hide();
-          }
+        if (page >= max) {
+          button.hide();
+          return;
         }
-      }
-    });
-  });
-});
-</script>
 
-<?php
+        $.ajax({
+          url: '<?php echo admin_url("admin-ajax.php"); ?>',
+          type: 'POST',
+          data: {
+            action: 'load_more_articles',
+            page: page + 1,
+            posts_per_page: <?php echo $atts['posts_per_page']; ?>,
+            category: '<?php echo $atts['category']; ?>'
+          },
+          success: function(response) {
+            if (response) {
+              $('.custom-articles-grid').append(response);
+              button.data('page', page + 1);
+
+              if (page + 1 >= max) {
+                button.hide();
+              }
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+  <?php
   wp_reset_postdata();
   return ob_get_clean();
 }
@@ -582,39 +593,39 @@ function load_more_articles()
   if ($query->have_posts()) {
     while ($query->have_posts()) : $query->the_post();
   ?>
-<div class="article-card">
-  <div class="article-content">
-    <div class="article-date">
-      <?php echo get_the_date('j M Y'); ?>
-    </div>
-    <h3 class="article-title">
-      <?php the_title(); ?>
-    </h3>
-    <div class="article-excerpt">
-      <?php
+      <div class="article-card">
+        <div class="article-content">
+          <div class="article-date">
+            <?php echo get_the_date('j M Y'); ?>
+          </div>
+          <h3 class="article-title">
+            <?php the_title(); ?>
+          </h3>
+          <div class="article-excerpt">
+            <?php
             $excerpt = get_the_excerpt();
-            echo wp_trim_words($excerpt, 9, '...');
+            echo wp_trim_words($excerpt, 11, '...');
             ?>
-    </div>
-    <div class="article-meta">
-      <a href="<?php the_permalink(); ?>" class="read-more-btn">
-        ЧИТАТЬ ПОДРОБНЕЕ
-      </a>
-    </div>
-    <div class="article-image">
-      <?php if (has_post_thumbnail()) : ?>
-      <a href="<?php the_permalink(); ?>">
-        <?php the_post_thumbnail('medium', array('class' => 'article-thumb')); ?>
-      </a>
-      <?php else : ?>
-      <div class="no-image-placeholder">
-        <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.jpg" alt="<?php the_title(); ?>">
+          </div>
+          <div class="article-meta">
+            <a href="<?php the_permalink(); ?>" class="read-more-btn">
+              ЧИТАТЬ ПОДРОБНЕЕ
+            </a>
+          </div>
+          <div class="article-image">
+            <?php if (has_post_thumbnail()) : ?>
+              <a href="<?php the_permalink(); ?>">
+                <?php the_post_thumbnail('custom-article-thumb', array('class' => 'article-thumb')); ?>
+              </a>
+            <?php else : ?>
+              <div class="no-image-placeholder">
+                <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.jpg" alt="<?php the_title(); ?>">
+              </div>
+            <?php endif; ?>
+          </div>
+        </div>
       </div>
-      <?php endif; ?>
-    </div>
-  </div>
-</div>
-<?php
+    <?php
     endwhile;
   }
 
@@ -624,22 +635,29 @@ function load_more_articles()
 add_action('wp_ajax_load_more_articles', 'load_more_articles');
 add_action('wp_ajax_nopriv_load_more_articles', 'load_more_articles');
 
+function remove_image_attributes($html, $post_id, $post_image_id)
+{
+  $html = preg_replace('/(height|width)="\d+"/', '', $html);
+  return $html;
+}
+add_filter('post_thumbnail_html', 'remove_image_attributes', 10, 3);
+
 
 function add_article_meta_tags()
 {
   if (is_single()) {
     global $post;
     ?>
-<meta property="og:title" content="<?php echo esc_attr(get_the_title()); ?>">
-<meta property="og:description"
-  content="<?php echo esc_attr(wp_trim_words(get_the_excerpt() ?: $post->post_content, 20)); ?>">
-<meta property="og:type" content="article">
-<meta property="og:url" content="<?php echo esc_url(get_permalink()); ?>">
-<?php if (has_post_thumbnail()) : ?>
-<meta property="og:image" content="<?php echo esc_url(get_the_post_thumbnail_url(null, 'large')); ?>">
-<?php endif; ?>
-<meta property="article:published_time" content="<?php echo get_the_date('c'); ?>">
-<meta property="article:modified_time" content="<?php echo get_the_modified_date('c'); ?>">
+    <meta property="og:title" content="<?php echo esc_attr(get_the_title()); ?>">
+    <meta property="og:description"
+      content="<?php echo esc_attr(wp_trim_words(get_the_excerpt() ?: $post->post_content, 20)); ?>">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?php echo esc_url(get_permalink()); ?>">
+    <?php if (has_post_thumbnail()) : ?>
+      <meta property="og:image" content="<?php echo esc_url(get_the_post_thumbnail_url(null, 'large')); ?>">
+    <?php endif; ?>
+    <meta property="article:published_time" content="<?php echo get_the_date('c'); ?>">
+    <meta property="article:modified_time" content="<?php echo get_the_modified_date('c'); ?>">
 <?php
 
     // Структурированные данные JSON-LD для статьи
@@ -673,14 +691,12 @@ function add_article_meta_tags()
 }
 add_action('wp_head', 'add_article_meta_tags');
 
-// Улучшаем excerpts - убираем стандартный [...] и заменяем на ...
 function custom_excerpt_more($more)
 {
   return '...';
 }
 add_filter('excerpt_more', 'custom_excerpt_more');
 
-// Увеличиваем длину excerpts до 25 слов
 function custom_excerpt_length($length)
 {
   return 25;
