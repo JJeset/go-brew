@@ -67,8 +67,9 @@ get_header(); ?>
           </div>
         </div>
       </div>
-      <button class=" button">
-        <div class="manufacturer_button-text ">SECRET LOT</div><span></span>
+      <button class="manufacturer_button button">
+        <div class="manufacturer_button-text">SECRET LOT</div>
+
       </button>
 
 
@@ -76,7 +77,7 @@ get_header(); ?>
     </div>
 
   </section>
-  <span class="sepparator"></span>
+  <div class="container"><span class="sepparator"></span></div>
   <section class="how-works">
     <div class="container">
       <div class="how-works_title">
@@ -84,7 +85,8 @@ get_header(); ?>
       </div>
       <div class="how-works_list">
         <div class="how-works_item">
-          <img class="how-works_item-img" src="" alt="">
+          <span class="how_works-step"><img class="how_works-img"
+              src="<?php echo get_template_directory_uri(); ?>/images/step1.svg" alt=""></span>
           <div class="how-works_item-title">
             Оформляете подписку
           </div>
@@ -95,7 +97,8 @@ get_header(); ?>
           </div>
         </div>
         <div class="how-works_item">
-          <img class="how-works_item-img" src="" alt="">
+          <span class="how_works-step"><img class="how_works-img"
+              src="<?php echo get_template_directory_uri(); ?>/images/step2.svg" alt=""></span>
           <div class="how-works_item-title">
             Получаете посылку
           </div>
@@ -105,7 +108,8 @@ get_header(); ?>
           </div>
         </div>
         <div class="how-works_item">
-          <img class="how-works_item-img" src="" alt="">
+          <span class="how_works-step"><img class="how_works-img"
+              src="<?php echo get_template_directory_uri(); ?>/images/step3.svg" alt=""></span>
           <div class="how-works_item-title">
             Завариваете, пробуете, открываете новое
           </div>
@@ -119,7 +123,7 @@ get_header(); ?>
     </div>
   </section>
   <article class="formalize">
-    <div class="container">
+    <div class="container container_formalize">
       <div class="formalize_price">
         3000 ₽
       </div>
@@ -137,7 +141,7 @@ get_header(); ?>
           <div class="faq_item-title">
             Cтоимость доставки входит в стоимость подписки?
           </div>
-          <img class="faq_item-img" src="" alt="">
+
           <div class="faq_item-text">
             Нет, стоимость доставки не включена. География у нас широкая, и невозможно установить единую фиксированную
             цену на доставку. Это решение позволяет нам сосредоточиться на главном — отборе по-настоящему
@@ -148,7 +152,6 @@ get_header(); ?>
           <div class="faq_item-title">
             Можно ли временно заморозить или отменить подписку?
           </div>
-          <img class="faq_item-img" src="" alt="">
           <div class="faq_item-text">
             Конечно. В личном кабинете можно поставить подписку на паузу или отменить её в любой момент. Перерыв до 1
             месяца не повлияет на вашу лояльность — при возвращении всё продолжит накапливаться, как прежде.
@@ -158,42 +161,30 @@ get_header(); ?>
           <div class="faq_item-title">
             Когда отправляется кофе?
           </div>
-          <img class="faq_item-img" src="" alt="">
-          <div class="faq_item-text">
 
-          </div>
         </div>
         <div class="faq_item">
           <div class="faq_item-title">
             Куда вы доставляете?
           </div>
-          <img class="faq_item-img" src="" alt="">
-          <div class="faq_item-text">
 
-          </div>
         </div>
         <div class="faq_item">
           <div class="faq_item-title">
             Сколько кофе я получу?
           </div>
-          <img class="faq_item-img" src="" alt="">
-          <div class="faq_item-text">
 
-          </div>
         </div>
         <div class="faq_item">
           <div class="faq_item-title">
             Кофе приходит в зёрнах?
           </div>
-          <img class="faq_item-img" src="" alt="">
-          <div class="faq_item-text">
 
-          </div>
         </div>
 
   </section>
   <section class="contact">
-    <div class="container">
+    <div class="container container_contact">
       <div class="contact_title">
         Остались вопросы?
       </div>
@@ -208,14 +199,31 @@ get_header(); ?>
 
   </section>
   <section class="around">
-    <div class="cointainer">
+    <div class="container">
       <div class="around-up">
         <div class="around-up-title">
           Наш кофейный кружок GO BREW
         </div>
-        <div class="around-blog-button">
+        <button href="/Blog-page.php" class="around-blog-button button">
           Все блоги
-        </div>
+        </button>
+      </div>
+      <div class="around_content">
+        <?php
+        // Различные варианты использования шорткода:
+
+        // Базовый вариант - показать последние 8 статей
+        // echo do_shortcode('[custom_articles_grid]');
+
+        // Можно указать количество статей и колонок
+        echo do_shortcode('[custom_articles_grid posts_per_page="4" columns="4" show_load_more="false"]');
+
+        // Можно показать статьи определенной категории
+        // echo do_shortcode('[custom_articles_grid category="coffee" posts_per_page="8"]');
+
+        // Можно отключить кнопку "Показать еще"
+        // echo do_shortcode('[custom_articles_grid show_load_more="false"]');
+        ?>
       </div>
     </div>
   </section>

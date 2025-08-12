@@ -135,6 +135,8 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   flex-shrink: 0;
   border-radius: 30px;
   letter-spacing: 0.5px;
+
+  transition: var(--transition);
 }
 
 
@@ -622,8 +624,10 @@ table {
 /* Links
 --------------------------------------------- */
 a {
-  color: #4169e1;
+  color: var(--dark-text);
+  text-decoration: none;
 }
+
 
 a:visited {}
 
@@ -2034,9 +2038,6 @@ textarea {
   transition: color 0.3s ease;
 }
 
-.footer-legal-link:hover {
-  text-decoration: underline;
-}
 
 .footer-gobrew {
   color: #F2F3F4;
@@ -2307,14 +2308,13 @@ footer {
 
 .inside-main {
   background: #F5F5F5;
-  margin: 0 0 60px;
 }
 
 .lots {
   background: #FDFCFA;
-  margin: 0 0 60px;
-  padding: 24px 0 0;
+  padding: 24px 0 60px;
 }
+
 
 .lots_title {
   font-size: 40px;
@@ -2373,6 +2373,7 @@ footer {
 .manufacturer_content {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 30px;
   justify-content: center;
   align-items: center;
 }
@@ -2380,7 +2381,7 @@ footer {
 .manufacturer_item {}
 
 .manufacturer_title {
-  padding-top: 34px;
+  margin-top: 34px;
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.7px;
@@ -2395,59 +2396,292 @@ footer {
 
 .button {}
 
-.manufacturer_button-text {}
+.manufacturer_button {
+  align-self: center;
+  width: 590px;
+  height: 54px;
+  flex-shrink: 0;
+  justify-content: space-between;
 
-.sepparator {}
+  border: 1px solid rgba(33, 33, 35, 0.10);
+  background: #FDFCFA;
+  box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
 
-.how-works {}
+  position: relative;
+  justify-self: center;
+}
 
-.how-works_title {}
+.manufacturer_button-text {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  text-transform: uppercase;
+}
 
-.how-works_list {}
+.manufacturer_button::after {
+  content: url('./images/arrow.svg');
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  padding: 13px;
+  background-color: #FFB8B3;
+  border-radius: 30px;
 
-.how-works_item {}
+  transition: var(--transition);
 
-.how-works_item-img {}
+}
 
-.how-works_item-title {}
 
-.how-works_item-text {}
 
-.formalize {}
 
-.formalize_price {}
+.sepparator {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgba(33, 33, 35, 0.10);
+}
 
-.button_formalize {}
+.how-works {
+  padding: 60px 0;
+  background: #FDFCFA;
+}
 
-.faq {}
+.how-works_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
 
-.faq_title {}
+.how-works_list {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px;
+}
 
-.faq_list {}
+.how-works_item {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
 
-.faq_item {}
+.how_works-img {
+  max-width: 56px;
+  max-height: 56px;
+}
 
-.faq_item-title {}
+.how_works-step {
+  padding: 7px 7px 5px;
+  border-radius: 15px;
+  background: #FFB8B3;
+}
 
-.faq_item-img {}
+.how-works_item-title {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  text-transform: uppercase;
+}
 
-.faq_item-text {}
+.how-works_item-text {
+  margin-top: 10px;
+  line-height: 16px;
+}
 
-.contact {}
+.formalize {
+  padding: 60px 0;
+  background: #F3EEEA;
+}
 
-.contact_title {}
+.container_formalize {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.contact_text {}
+.formalize_price {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  text-transform: uppercase;
+}
 
-.contact_button {}
+.button_formalize {
+  margin-top: 24px;
+  border-radius: 30px;
+  border: 1px solid rgba(33, 33, 35, 0.10);
+  background: #FFB8B3;
+  box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
 
-.around {}
+  max-width: 260px;
+  width: 100%;
+  max-height: 40px;
+  height: 100%;
+  padding: 13px;
+  flex-shrink: 0;
 
-.around-up {}
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  /* 100% */
+  text-transform: uppercase;
+}
 
-.around-up-title {}
+.button_formalize:hover {
+  background: #c79b99;
+}
 
-.around-blog-button {}
+.faq {
+  padding: 60px 0;
+}
+
+.faq_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.faq_list {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.faq_item {
+  position: relative;
+  border-radius: 30px;
+  border: 1px solid rgba(33, 33, 35, 0.10);
+  background: #FDFCFA;
+  box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
+
+  padding: 16px 24px 3px;
+  max-width: 590px;
+}
+
+.faq_item-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  text-transform: uppercase;
+  max-width: 370px;
+  margin-bottom: 12px;
+}
+
+.faq_item::after {
+  content: url('./images/arrow.svg');
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  padding: 13px;
+  background-color: #FFB8B3;
+  border-radius: 30px;
+
+  transition: var(--transition);
+
+}
+
+.faq_item:hover::after {
+  transform: rotate(45deg);
+}
+
+
+.faq_item-text {
+
+  margin-bottom: 21px;
+}
+
+.contact {
+  background: url('./images/contact_bg.png');
+  background-size: cover;
+  padding: 30px 0;
+}
+
+.container_contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 67px 0;
+  border-radius: 30px;
+  background: #FFB8B3;
+}
+
+.contact_title {
+
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.contact_text {
+  margin-top: 16px;
+}
+
+.contact_button span {
+
+  color: #FDFCFA;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.5px;
+  /* 100% */
+  text-transform: uppercase;
+}
+
+.contact_button {
+  display: flex;
+  width: 160px;
+  height: 40px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  border-radius: 30px;
+  background: #212123;
+}
+
+.around {
+  padding: 60px 0;
+
+}
+
+.around-up {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.around-up-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.around-blog-button {
+  margin-top: 0;
+  text-align: center;
+  font-weight: 600;
+  line-height: 14px;
+  /* 100% */
+  text-transform: uppercase;
+
+  border-radius: 30px;
+  background: #FFB8B3;
+}
 
 /* _____________________________________ */
 

@@ -434,3 +434,274 @@ function mytheme_breadcrumbs()
 
   echo '</nav>';
 }
+
+
+// BLOG 
+
+function enqueue_custom_articles_styles()
+{
+  wp_enqueue_style('custom-articles-style', get_template_directory_uri() . '/css/custom-articles.css', array(), '1.0.0');
+}
+add_action('wp_enqueue_scripts', 'enqueue_custom_articles_styles');
+
+// Шорткод для отображения статей
+function custom_articles_grid_shortcode($atts)
+{
+  $atts = shortcode_atts(array(
+    'posts_per_page' => 8,
+    'category' => '',
+    'show_load_more' => 'true',
+    'columns' => 4
+  ), $atts);
+
+  $args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $atts['posts_per_page'],
+    'post_status' => 'publish'
+  );
+
+  if (!empty($atts['category'])) {
+    $args['category_name'] = $atts['category'];
+  }
+
+  $query = new WP_Query($args);
+
+  if (!$query->have_posts()) {
+    return '<p>Статьи не найдены.</p>';
+  }
+
+  ob_start();
+?>
+<div class="custom-articles-grid columns-<?php echo esc_attr($atts['columns']); ?>">
+  <?php while ($query->have_posts()) : $query->the_post(); ?>
+  <div class="article-card">
+    <div class="article-content">
+      <div class="article-date">
+        <?php echo get_the_date('j M Y'); ?>
+      </div>
+      <h3 class="article-title">
+        <?php the_title(); ?>
+      </h3>
+      <div class="article-excerpt">
+        <?php
+            $excerpt = get_the_excerpt();
+            echo wp_trim_words($excerpt, 9, '...');
+            ?>
+      </div>
+      <div class="article-meta">
+        <a href="<?php the_permalink(); ?>" class="read-more-btn">
+          ЧИТАТЬ ПОДРОБНЕЕ
+        </a>
+      </div>
+      <div class="article-image">
+        <?php if (has_post_thumbnail()) : ?>
+        <a href="<?php the_permalink(); ?>">
+          <?php the_post_thumbnail('medium', array('class' => 'article-thumb')); ?>
+        </a>
+        <?php else : ?>
+        <div class="no-image-placeholder">
+          <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.png" alt="<?php the_title(); ?>">
+        </div>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
+  <?php endwhile; ?>
+</div>
+
+<?php if ($atts['show_load_more'] === 'true') : ?>
+<div class="load-more-container">
+  <button class="load-more-btn" data-page="1" data-max="<?php echo $query->max_num_pages; ?>">
+    ПОКАЗАТЬ ЕЩЕ
+  </button>
+</div>
+<?php endif; ?>
+
+<script>
+jQuery(document).ready(function($) {
+  $('.load-more-btn').on('click', function() {
+    var button = $(this);
+    var page = button.data('page');
+    var max = button.data('max');
+
+    if (page >= max) {
+      button.hide();
+      return;
+    }
+
+    $.ajax({
+      url: '<?php echo admin_url("admin-ajax.php"); ?>',
+      type: 'POST',
+      data: {
+        action: 'load_more_articles',
+        page: page + 1,
+        posts_per_page: <?php echo $atts['posts_per_page']; ?>,
+        category: '<?php echo $atts['category']; ?>'
+      },
+      success: function(response) {
+        if (response) {
+          $('.custom-articles-grid').append(response);
+          button.data('page', page + 1);
+
+          if (page + 1 >= max) {
+            button.hide();
+          }
+        }
+      }
+    });
+  });
+});
+</script>
+
+<?php
+  wp_reset_postdata();
+  return ob_get_clean();
+}
+add_shortcode('custom_articles_grid', 'custom_articles_grid_shortcode');
+
+// AJAX обработчик для загрузки дополнительных статей
+function load_more_articles()
+{
+  $page = $_POST['page'];
+  $posts_per_page = $_POST['posts_per_page'];
+  $category = $_POST['category'];
+
+  $args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $posts_per_page,
+    'paged' => $page,
+    'post_status' => 'publish'
+  );
+
+  if (!empty($category)) {
+    $args['category_name'] = $category;
+  }
+
+  $query = new WP_Query($args);
+
+  if ($query->have_posts()) {
+    while ($query->have_posts()) : $query->the_post();
+  ?>
+<div class="article-card">
+  <div class="article-content">
+    <div class="article-date">
+      <?php echo get_the_date('j M Y'); ?>
+    </div>
+    <h3 class="article-title">
+      <?php the_title(); ?>
+    </h3>
+    <div class="article-excerpt">
+      <?php
+            $excerpt = get_the_excerpt();
+            echo wp_trim_words($excerpt, 9, '...');
+            ?>
+    </div>
+    <div class="article-meta">
+      <a href="<?php the_permalink(); ?>" class="read-more-btn">
+        ЧИТАТЬ ПОДРОБНЕЕ
+      </a>
+    </div>
+    <div class="article-image">
+      <?php if (has_post_thumbnail()) : ?>
+      <a href="<?php the_permalink(); ?>">
+        <?php the_post_thumbnail('medium', array('class' => 'article-thumb')); ?>
+      </a>
+      <?php else : ?>
+      <div class="no-image-placeholder">
+        <img src="<?php echo get_template_directory_uri(); ?>/images/default-article.jpg" alt="<?php the_title(); ?>">
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php
+    endwhile;
+  }
+
+  wp_reset_postdata();
+  wp_die();
+}
+add_action('wp_ajax_load_more_articles', 'load_more_articles');
+add_action('wp_ajax_nopriv_load_more_articles', 'load_more_articles');
+
+
+function add_article_meta_tags()
+{
+  if (is_single()) {
+    global $post;
+    ?>
+<meta property="og:title" content="<?php echo esc_attr(get_the_title()); ?>">
+<meta property="og:description"
+  content="<?php echo esc_attr(wp_trim_words(get_the_excerpt() ?: $post->post_content, 20)); ?>">
+<meta property="og:type" content="article">
+<meta property="og:url" content="<?php echo esc_url(get_permalink()); ?>">
+<?php if (has_post_thumbnail()) : ?>
+<meta property="og:image" content="<?php echo esc_url(get_the_post_thumbnail_url(null, 'large')); ?>">
+<?php endif; ?>
+<meta property="article:published_time" content="<?php echo get_the_date('c'); ?>">
+<meta property="article:modified_time" content="<?php echo get_the_modified_date('c'); ?>">
+<?php
+
+    // Структурированные данные JSON-LD для статьи
+    $schema = array(
+      '@context' => 'https://schema.org',
+      '@type' => 'Article',
+      'headline' => get_the_title(),
+      'description' => wp_trim_words(get_the_excerpt() ?: $post->post_content, 20),
+      'datePublished' => get_the_date('c'),
+      'dateModified' => get_the_modified_date('c'),
+      'author' => array(
+        '@type' => 'Person',
+        'name' => get_the_author()
+      ),
+      'publisher' => array(
+        '@type' => 'Organization',
+        'name' => get_bloginfo('name'),
+        'logo' => array(
+          '@type' => 'ImageObject',
+          'url' => get_site_icon_url()
+        )
+      )
+    );
+
+    if (has_post_thumbnail()) {
+      $schema['image'] = get_the_post_thumbnail_url(null, 'large');
+    }
+
+    echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
+  }
+}
+add_action('wp_head', 'add_article_meta_tags');
+
+// Улучшаем excerpts - убираем стандартный [...] и заменяем на ...
+function custom_excerpt_more($more)
+{
+  return '...';
+}
+add_filter('excerpt_more', 'custom_excerpt_more');
+
+// Увеличиваем длину excerpts до 25 слов
+function custom_excerpt_length($length)
+{
+  return 25;
+}
+add_filter('excerpt_length', 'custom_excerpt_length');
+
+// Добавляем шорткод для времени чтения
+function reading_time_shortcode($atts)
+{
+  $time = get_reading_time();
+  return '<span class="reading-time">Время чтения: ' . $time . ' мин.</span>';
+}
+add_shortcode('reading_time', 'reading_time_shortcode');
+
+// Добавляем класс body для одиночных статей
+function add_single_post_body_class($classes)
+{
+  if (is_single()) {
+    $classes[] = 'single-article-page';
+  }
+  return $classes;
+}
+add_filter('body_class', 'add_single_post_body_class');
+?>
