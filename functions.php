@@ -869,4 +869,192 @@ function enqueue_checkout_styles()
 }
 add_action('wp_enqueue_scripts', 'enqueue_checkout_styles');
 
+
+
+
+add_filter('woocommerce_locate_template', 'custom_checkout_template', 10, 3);
+function custom_checkout_template($template, $template_name, $template_path)
+{
+  if ($template_name === 'checkout/form-checkout.php') {
+    $template = get_stylesheet_directory() . '/woocommerce/checkout/custom-checkout.php';
+  }
+  return $template;
+}
+
+
+
+/**
+ * Enqueue Cart page styles
+ */
+function enqueue_cart_styles()
+{
+  // Подключаем стили только на странице корзины
+  if (is_cart()) {
+    wp_enqueue_style(
+      'cart-styles',
+      get_template_directory_uri() . '/css/cart-styles.css',
+      array('go-brew-style'),
+      '1.0.0',
+      'all'
+    );
+  }
+}
+add_action('wp_enqueue_scripts', 'enqueue_cart_styles');
+
+/**
+ * Add custom attributes for mobile table display
+ */
+function add_cart_table_mobile_attributes()
+{
+?>
+  <script>
+    jQuery(document).ready(function($) {
+      // Добавляем data-title атрибуты для мобильного отображения
+      $('.woocommerce table.cart .product-remove').attr('data-title', 'Удалить');
+      $('.woocommerce table.cart .product-thumbnail').attr('data-title', 'Товар');
+      $('.woocommerce table.cart .product-name').attr('data-title', 'Название');
+      $('.woocommerce table.cart .product-price').attr('data-title', 'Цена');
+      $('.woocommerce table.cart .product-quantity').attr('data-title', 'Количество');
+      $('.woocommerce table.cart .product-subtotal').attr('data-title', 'Сумма');
+    });
+  </script>
+<?php
+}
+add_action('wp_footer', 'add_cart_table_mobile_attributes');
+
+/**
+ * Customize WooCommerce cart table headers
+ */
+function customize_cart_table_headers($defaults)
+{
+  $custom_headers = array(
+    'remove'      => '',
+    'thumbnail'   => 'Товар',
+    'name'        => 'Название',
+    'price'       => 'Цена',
+    'quantity'    => 'Количество',
+    'subtotal'    => 'Сумма'
+  );
+
+  return array_merge($defaults, $custom_headers);
+}
+add_filter('woocommerce_cart_item_remove_link', 'customize_cart_table_headers');
+
+/**
+ * Add continue shopping button to cart page
+ */
+function add_continue_shopping_button_to_cart()
+{
+?>
+  <div class="continue-shopping" style="margin-top: 20px;">
+    <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="button button-continue">
+      <span class="button-text">← ПРОДОЛЖИТЬ ПОКУПКИ</span>
+    </a>
+  </div>
+  <style>
+    .button-continue {
+      background: #F3EEEA;
+      color: var(--dark-text);
+      border: 1px solid rgba(33, 33, 35, 0.1);
+      margin-top: 0;
+    }
+
+    .button-continue:hover {
+      background: #e6ddd7;
+      transform: translateY(-1px);
+    }
+  </style>
+<?php
+}
+add_action('woocommerce_cart_actions', 'add_continue_shopping_button_to_cart');
+
+/**
+ * Modify cart item name to remove link (optional)
+ */
+function remove_cart_item_link($product_name, $cart_item, $cart_item_key)
+{
+  $product = $cart_item['data'];
+
+  if ($product && $product->exists() && $cart_item['quantity'] > 0 && apply_filters('woocommerce_cart_item_visible', true, $cart_item, $cart_item_key)) {
+    $product_permalink = apply_filters('woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
+
+    if (!$product_permalink) {
+      return $product->get_name() . '&nbsp;';
+    }
+  }
+
+  return $product_name;
+}
+// Раскомментируйте следующую строку, если хотите убрать ссылки с названий товаров в корзине
+// add_filter('woocommerce_cart_item_name', 'remove_cart_item_link', 10, 3);
+
+/**
+ * Customize cart messages
+ */
+function customize_cart_messages()
+{
+  // Изменяем текст кнопки "Обновить корзину"
+  add_filter('gettext', function ($translated_text, $text, $domain) {
+    if ($domain === 'woocommerce') {
+      switch ($text) {
+        case 'Update cart':
+          return 'Обновить корзину';
+        case 'Proceed to checkout':
+          return 'Оформить заказ';
+        case 'Apply coupon':
+          return 'Применить купон';
+        case 'Coupon code':
+          return 'Код купона';
+        case 'Cart totals':
+          return 'Итого по корзине';
+        case 'Subtotal':
+          return 'Промежуточная сумма';
+        case 'Total':
+          return 'Всего к оплате';
+      }
+    }
+    return $translated_text;
+  }, 20, 3);
+}
+add_action('init', 'customize_cart_messages');
+
+/**
+ * Add cart count to header (if needed)
+ */
+function add_cart_count_to_header()
+{
+  if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    $count = WC()->cart->get_cart_contents_count();
+    if ($count > 0) {
+      echo '<span class="cart-count">' . esc_html($count) . '</span>';
+    }
+  }
+}
+
+/**
+ * AJAX update cart count
+ */
+function update_cart_count()
+{
+  if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    wp_enqueue_script('wc-cart-fragments');
+  }
+}
+add_action('wp_enqueue_scripts', 'update_cart_count');
+
+/**
+ * Remove WooCommerce default styles on cart page
+ */
+function remove_woocommerce_styles_on_cart()
+{
+  if (is_cart()) {
+    wp_dequeue_style('woocommerce-general');
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+  }
+}
+add_action('wp_enqueue_scripts', 'remove_woocommerce_styles_on_cart', 99);
+
+
+
 ?>

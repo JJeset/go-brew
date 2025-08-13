@@ -4,7 +4,7 @@
  * The template for displaying WooCommerce My Account page
  * 
  * /**
- * Template Name: Оформление заказа
+ * Template Name: Оформление заказа (кастом)
  * 
  *
  *
@@ -19,9 +19,15 @@ if (!defined('ABSPATH')) {
 
 get_header(); ?>
 
-<main id="primary" class="site-main">
+<article class="breadcrumbs-art">
   <div class="container">
     <?php mytheme_breadcrumbs(); ?>
+  </div>
+</article>
+
+<main id="primary" class="site-main">
+  <div class="container">
+
 
     <div class="checkout-page">
       <?php
@@ -299,17 +305,20 @@ get_header(); ?>
   }
 
   .checkout-step-number {
-    width: 40px;
-    height: 40px;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 53px;
+    /* 165.625% */
+    letter-spacing: -1.2px;
+    text-transform: uppercase;
+    color: var(--dark-text);
+
+    padding: 27px 29px 25px 25px;
     background: var(--primary-pink);
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: #FFFFFF;
-    flex-shrink: 0;
+    border-radius: 15px;
   }
 
   .checkout-step-title {
