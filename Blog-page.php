@@ -11,7 +11,7 @@ get_header(); ?>
     <?php mytheme_breadcrumbs(); ?>
   </div>
 </article>
-<section class="blog">
+<section class="blog_section">
 
   <div class="container">
 

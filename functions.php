@@ -671,7 +671,7 @@ function add_article_meta_tags()
     <?php endif; ?>
     <meta property="article:published_time" content="<?php echo get_the_date('c'); ?>">
     <meta property="article:modified_time" content="<?php echo get_the_modified_date('c'); ?>">
-<?php
+  <?php
 
     // Структурированные данные JSON-LD для статьи
     $schema = array(
@@ -740,4 +740,133 @@ add_filter('body_class', 'add_single_post_body_class');
 add_filter('disable_image_downsize', 10, 4);
 add_filter('png_quality', 'set_high_quality_images', 10, 2);
 add_filter('jpeg_quality', 'set_high_quality_images', 10, 2);
+
+
+
+// My account 
+
+/**
+ * Enqueue My Account page styles
+ */
+function enqueue_my_account_styles()
+{
+  // Подключаем стили только на странице личного кабинета
+  if (is_account_page()) {
+    wp_enqueue_style(
+      'my-account-styles',
+      get_template_directory_uri() . '/css/my-account-styles.css',
+      array('go-brew-style'),
+      '1.0.0',
+      'all'
+    );
+  }
+}
+add_action('wp_enqueue_scripts', 'enqueue_my_account_styles');
+
+/**
+ * Customize WooCommerce My Account menu items
+ */
+function customize_my_account_menu_items($items)
+{
+  // Переводим пункты меню на русский язык
+  $custom_items = array(
+    'dashboard'       => 'Панель управления',
+    'orders'         => 'Заказы',
+    'downloads'      => 'Загрузки',
+    'edit-address'   => 'Адреса',
+    'edit-account'   => 'Данные аккаунта',
+    'customer-logout' => 'Выйти'
+  );
+
+  // Заменяем только те пункты, которые есть в массиве
+  foreach ($items as $key => $item) {
+    if (isset($custom_items[$key])) {
+      $items[$key] = $custom_items[$key];
+    }
+  }
+
+  return $items;
+}
+add_filter('woocommerce_account_menu_items', 'customize_my_account_menu_items');
+
+/**
+ * Redirect users to custom my account page after login
+ */
+function redirect_to_my_account_after_login($redirect_to, $request, $user)
+{
+  if (isset($user->roles) && is_array($user->roles)) {
+    if (in_array('customer', $user->roles)) {
+      return wc_get_page_permalink('myaccount');
+    }
+  }
+  return $redirect_to;
+}
+add_filter('login_redirect', 'redirect_to_my_account_after_login', 10, 3);
+
+/**
+ * Customize WooCommerce account page titles
+ */
+function customize_woocommerce_account_page_titles($title, $endpoint)
+{
+  $custom_titles = array(
+    'dashboard'      => 'Панель управления',
+    'orders'        => 'Мои заказы',
+    'downloads'     => 'Загрузки',
+    'edit-address'  => 'Мои адреса',
+    'edit-account'  => 'Данные аккаунта',
+    'lost-password' => 'Восстановление пароля'
+  );
+
+  if (isset($custom_titles[$endpoint])) {
+    return $custom_titles[$endpoint];
+  }
+
+  return $title;
+}
+add_filter('woocommerce_endpoint_title', 'customize_woocommerce_account_page_titles', 10, 2);
+
+/**
+ * Add custom content to My Account dashboard
+ */
+function add_custom_my_account_dashboard_content()
+{
+  ?>
+  <div class="custom-dashboard-welcome">
+    <h3>Добро пожаловать в ваш личный кабинет!</h3>
+    <p>Здесь вы можете управлять своими заказами, подписками и личными данными.</p>
+  </div>
+<?php
+}
+add_action('woocommerce_account_dashboard', 'add_custom_my_account_dashboard_content', 5);
+
+/**
+ * Remove WooCommerce default styles on account page
+ */
+function remove_woocommerce_styles_on_account()
+{
+  if (is_account_page()) {
+    wp_dequeue_style('woocommerce-general');
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+  }
+}
+add_action('wp_enqueue_scripts', 'remove_woocommerce_styles_on_account', 99);
+
+
+
+function enqueue_checkout_styles()
+{
+  // Проверяем, что WooCommerce активен и это страница оформления заказа
+  if (function_exists('is_checkout') && is_checkout()) {
+    wp_enqueue_style(
+      'checkout-styles',
+      get_template_directory_uri() . '/css/checkout-styles.css',
+      array(),
+      '1.0.0',
+      'all'
+    );
+  }
+}
+add_action('wp_enqueue_scripts', 'enqueue_checkout_styles');
+
 ?>
