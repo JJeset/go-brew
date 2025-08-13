@@ -116,7 +116,7 @@ get_header(); ?>
       </div>
     </div>
   </section>
-  <section class="subscribe">
+  <article class="subscribe">
     <div class="container container_subscribe">
       <div class="subscribe_left">
         <img src="<?php echo get_template_directory_uri(); ?>./images/subscribe-bg.png">
@@ -130,7 +130,7 @@ get_header(); ?>
         </div>
       </div>
     </div>
-  </section>
+  </article>
 
   <?php the_content(); ?>
 </main>

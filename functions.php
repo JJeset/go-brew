@@ -24,7 +24,8 @@ function go_brew_setup()
 {
 
   // ресайз картинок
-  add_image_size('custom-article-thumb', 253, 153, true);
+  add_image_size('custom-article-thumb', 253, 153, array('center', 'center'));
+  add_image_size('large-article', 1920, 1080, false); // Для полностраничного отображения
   /*
 		* Make theme available for translation.
 		* Translations can be filed in the /languages/ directory.
@@ -413,10 +414,22 @@ function mytheme_breadcrumbs()
   // Ссылка на главную
   $home_link = esc_url(home_url('/'));
   $home_text = 'Главная';
+  $blog_page_id = get_option('page_for_posts');
+  $blog_link = get_permalink($blog_page_id);
+  $blog_text = 'Блог';
 
-  if (is_front_page() || is_home()) {
+  if (is_front_page()) {
     echo '<nav class="breadcrumbs" aria-label="Хлебные крошки">';
     echo '<a href="' . $home_link . '">' . esc_html($home_text) . '</a>';
+    echo '</nav>';
+    return;
+  }
+
+  if (is_home() && $blog_page_id) {
+    echo '<nav class="breadcrumbs" aria-label="Хлебные крошки">';
+    echo '<a href="' . $home_link . '">' . esc_html($home_text) . '</a>';
+    echo ' &gt; ';
+    echo '<span>' . esc_html($blog_text) . '</span>';
     echo '</nav>';
     return;
   }
@@ -426,7 +439,7 @@ function mytheme_breadcrumbs()
   echo ' &gt; ';
 
   if (is_single() && get_post_type() === 'post') {
-    echo '   <a href="' . get_permalink(get_option('page_for_posts')) . '">Блог</a> &gt; ';
+    echo '   <a href="' . $blog_link . '">' . esc_html($blog_text) . '</a> &gt; ';
     echo '<span>' . esc_html(get_the_title()) . '</span>';
   } elseif (is_singular()) {
     echo '<span>' . esc_html(get_the_title()) . '</span>';
@@ -720,4 +733,11 @@ function add_single_post_body_class($classes)
   return $classes;
 }
 add_filter('body_class', 'add_single_post_body_class');
+
+// Запрет автоматического уменьшения качества при обработке
+
+
+add_filter('disable_image_downsize', 10, 4);
+add_filter('png_quality', 'set_high_quality_images', 10, 2);
+add_filter('jpeg_quality', 'set_high_quality_images', 10, 2);
 ?>

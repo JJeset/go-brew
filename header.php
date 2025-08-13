@@ -28,7 +28,7 @@
       <div class="top-bar-content">
         <div class="top-bar-left">
           <span><img src="<?php echo get_template_directory_uri(); ?>/images/phone.svg">
-            <?php echo get_theme_mod('phone_number', '+7 (900) 300-23-14'); ?></span>
+            <a href="tel:+79003002314">+7 (900) 300-23-14</a></span>
 
         </div>
         <div class="top-bar-right">

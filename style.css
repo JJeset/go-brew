@@ -508,9 +508,7 @@ h6 {
   margin: initial;
 }
 
-p {
-  margin-bottom: 1.5em;
-}
+
 
 dfn,
 cite,
@@ -626,6 +624,7 @@ table {
 a {
   color: var(--dark-text);
   text-decoration: none;
+  transition: var(--transition);
 }
 
 
@@ -635,6 +634,7 @@ a:hover,
 a:focus,
 a:active {
   color: #191970;
+  transform: translateY(-1px);
 }
 
 a:focus {
@@ -644,6 +644,13 @@ a:focus {
 a:hover,
 a:active {
   outline: 0;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
+  transform: translateY(-1px);
 }
 
 /* Forms
@@ -661,12 +668,7 @@ input[type="submit"] {
   padding: 0.6em 1em 0.4em;
 }
 
-button:hover,
-input[type="button"]:hover,
-input[type="reset"]:hover,
-input[type="submit"]:hover {
-  border-color: #ccc #bbb #aaa;
-}
+
 
 button:active,
 button:focus,
@@ -985,10 +987,6 @@ textarea {
   display: block;
 }
 
-.post,
-.page {
-  margin: 0 0 1.5em;
-}
 
 .updated:not(.published) {
   display: none;
@@ -1803,12 +1801,14 @@ textarea {
   font-size: 40px;
   font-weight: 700;
   line-height: 50px;
+  max-width: 515px;
   /* 132.5% */
   letter-spacing: -0.5px;
   text-transform: uppercase;
 }
 
 .button_subscribe {
+  padding: 15px 25px;
   background: #212123;
   transition: var(--transition);
 }
@@ -1907,9 +1907,15 @@ textarea {
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
+  display: block;
 
   transition: var(--transition);
 }
+
+.nav-menu-footer li:hover {
+  transform: translateY(-0.5px);
+}
+
 
 
 
@@ -2045,7 +2051,7 @@ textarea {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -5.4px;
-  wrap: nowrap;
+  text-wrap: nowrap;
   text-align: center;
 }
 
@@ -2228,7 +2234,7 @@ textarea {
 footer {
   background: var(--white);
   color: var(--dark-text);
-  padding: 60px 0 30px;
+  padding: 60px 0 0;
 }
 
 .footer-content {
@@ -2307,7 +2313,7 @@ footer {
 
 
 .inside-main {
-  background: #F5F5F5;
+  background: #FDFCFA;
 }
 
 .lots {
@@ -2429,6 +2435,10 @@ footer {
 
   transition: var(--transition);
 
+}
+
+.manufacturer_button:hover::after {
+  transform: rotate(-45deg);
 }
 
 
@@ -2589,7 +2599,7 @@ footer {
 }
 
 .faq_item:hover::after {
-  transform: rotate(45deg);
+  transform: rotate(-45deg);
 }
 
 
@@ -2711,6 +2721,75 @@ footer {
 }
 
 /* __________________ */
+
+
+/* contacts page */
+
+
+.contacts_section {
+  background: #FDFCFA;
+  padding: 24px 0 60px;
+}
+
+.contacts_wrapper {
+  margin-bottom: 60px;
+}
+
+.contacts_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.contacts_text {
+  line-height: 16px;
+  /* 114.286% */
+  margin-top: 16px;
+  max-width: 670px;
+}
+
+.contacts_socials-wrapper {
+  margin-top: 50px;
+}
+
+.contacts_grid-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.contacts_grid-item {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  border-radius: 30px;
+  border: 1px solid rgba(33, 33, 35, 0.10);
+  background: #FDFCFA;
+  box-shadow: 0 9px 24px 0 rgba(59, 61, 78, 0.05);
+}
+
+.contacts_grid-item-name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+}
+
+.contacts_grid-item-tel {}
+
+.contacts_grid-item-email {}
+
+.contacts_grid-item-icons {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+/* ________ */
 
 /* ==========================================
 RESPONSIVE DESIGN

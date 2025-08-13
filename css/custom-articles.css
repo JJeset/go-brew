@@ -291,10 +291,17 @@
 
 .featured-image {
   width: 100%;
-  height: 400px;
+  height: auto;
+  object-fit: cover;
   overflow: hidden;
   border-radius: 0;
   margin-bottom: 0;
+}
+
+.featured-image img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .hero-image {
@@ -701,6 +708,137 @@
 }
 
 /* ___________ */
+
+
+
+/* ABOUT PAGE */
+.about-main {
+  background: #FDFCFA;
+  padding: 80px 0 0;
+}
+
+.about_intro-section {}
+
+
+.cointainer_about {}
+
+.about_intro {
+  display: flex;
+  justify-content: left;
+  gap: 56px;
+}
+
+.about_intro-left {
+  margin-top: 30px;
+  max-width: 595px;
+}
+
+.about_intro-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.about_intro-text {
+  margin-top: 16px;
+}
+
+.about_intro-right {}
+
+.about_intro-img {}
+
+.about_intro-img-front {
+  position: relative;
+  width: 406px;
+  height: 409px;
+  flex-shrink: 0;
+
+  border-radius: 28px;
+  border: 2px solid #FDFCFA;
+  z-index: 2;
+}
+
+.about_intro-img-back {
+  position: absolute;
+  top: 292px;
+  right: 110px;
+  width: 387px;
+  height: 387px;
+  flex-shrink: 0;
+
+  border-radius: 28px;
+  border: 2px solid #FDFCFA;
+}
+
+.gap10 {
+  margin-top: 10px;
+}
+
+.sepparator {
+  margin: 60px 0 115px;
+}
+
+.container_born {
+  display: flex;
+  justify-content: right;
+  gap: 56px;
+  margin-bottom: 60px;
+}
+
+
+.about_born-left {}
+
+.about_born-img {
+
+  position: relative;
+}
+
+.about_born-img-front {
+  position: relative;
+  width: 406px;
+  height: 409px;
+  flex-shrink: 0;
+
+  border-radius: 28px;
+  border: 2px solid #FDFCFA;
+  z-index: 3;
+}
+
+.about_born-img-back {
+  position: absolute;
+  top: -71px;
+  left: -136px;
+  width: 387px;
+  height: 387px;
+  flex-shrink: 0;
+
+  border-radius: 28px;
+  border: 2px solid #FDFCFA;
+}
+
+.about_born-right {
+  margin-top: 10px;
+  max-width: 595px;
+}
+
+.about_born-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 53px;
+  /* 132.5% */
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+
+.about_born-text {
+  margin-top: 16px;
+}
+
+
+/* ________________ */
 
 /* === АДАПТИВНОСТЬ === */
 
