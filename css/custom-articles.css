@@ -1,5 +1,3 @@
-/* Создать файл css/custom-articles.css в папке темы */
-
 .custom-articles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -22,7 +20,7 @@
 }
 
 /* Адаптивность */
-/* @media (max-width: 1200px) {
+@media (max-width: 1200px) {
   .custom-articles-grid.columns-4 {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -40,7 +38,7 @@
   .custom-articles-grid {
     grid-template-columns: 1fr;
   }
-} */
+}
 
 /* Карточка статьи */
 .article-card {
@@ -777,7 +775,7 @@
   margin-top: 10px;
 }
 
-.sepparator {
+.sepparator-about {
   margin: 60px 0 115px;
 }
 

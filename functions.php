@@ -384,8 +384,7 @@ function enqueue_swiper_scripts()
                 spaceBetween: 10,
                 loop: true,
                 pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
+                    el: ".swiper-scrollbar"
                 },
                 breakpoints: {
                     0: {
@@ -1127,6 +1126,115 @@ add_action('woocommerce_admin_order_data_after_billing_address', function ($orde
     echo '<p><strong>' . __('Город доставки', 'go-brew') . ':</strong> ' . esc_html($city) . '</p>';
   }
 });
+
+
+
+/**
+ * AJAX handler для добавления товара в корзину и перехода на оформление заказа
+ */
+function add_subscription_to_cart_and_checkout()
+{
+  // Проверяем nonce для безопасности
+  if (!wp_verify_nonce($_POST['nonce'], 'add_subscription_nonce')) {
+    wp_die('Security check failed');
+  }
+
+  // ID товара подписки (нужно указать реальный ID вашего товара)
+  $product_id = get_option('subscription_product_id', 0);
+
+  if (!$product_id) {
+    wp_send_json_error(array('message' => 'Товар не найден'));
+    return;
+  }
+
+  // Очищаем корзину перед добавлением (если нужно)
+  // WC()->cart->empty_cart();
+
+  // Добавляем товар в корзину
+  $cart_item_key = WC()->cart->add_to_cart($product_id, 1);
+
+  if ($cart_item_key) {
+    // Возвращаем URL страницы оформления заказа
+    wp_send_json_success(array(
+      'checkout_url' => wc_get_checkout_url(),
+      'message' => 'Товар добавлен в корзину'
+    ));
+  } else {
+    wp_send_json_error(array('message' => 'Ошибка добавления товара в корзину'));
+  }
+}
+
+// Регистрируем AJAX обработчики
+add_action('wp_ajax_add_subscription_to_cart', 'add_subscription_to_cart_and_checkout');
+add_action('wp_ajax_nopriv_add_subscription_to_cart', 'add_subscription_to_cart_and_checkout');
+
+/**
+ * Добавляем настройку ID товара подписки в админку
+ */
+add_action('admin_menu', function () {
+  add_options_page(
+    'Настройки подписки',
+    'Подписка на кофе',
+    'manage_options',
+    'subscription-settings',
+    'render_subscription_settings'
+  );
+});
+
+add_action('admin_init', function () {
+  register_setting('subscription_settings_group', 'subscription_product_id');
+});
+
+function render_subscription_settings()
+{
+?>
+  <div class="wrap">
+    <h1>Настройки подписки на кофе</h1>
+    <form method="post" action="options.php">
+      <?php settings_fields('subscription_settings_group'); ?>
+      <?php do_settings_sections('subscription_settings_group'); ?>
+      <table class="form-table">
+        <tr>
+          <th scope="row">ID товара подписки</th>
+          <td>
+            <input type="number" name="subscription_product_id"
+              value="<?php echo esc_attr(get_option('subscription_product_id')); ?>" class="regular-text" />
+            <p class="description">Введите ID товара WooCommerce для подписки на кофе</p>
+          </td>
+        </tr>
+      </table>
+      <?php submit_button(); ?>
+    </form>
+  </div>
+<?php
+}
+
+/**
+ * Подключаем скрипты для AJAX
+ */
+function enqueue_subscription_scripts()
+{
+  if (is_page_template('Inside-page.php') || is_page_template('page-templates/Inside-page.php')) {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script(
+      'subscription-ajax',
+      get_template_directory_uri() . '/js/subscription-ajax.js',
+      array('jquery'),
+      '1.0.0',
+      true
+    );
+
+    // Передаем данные в JavaScript
+    wp_localize_script('subscription-ajax', 'subscription_ajax', array(
+      'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('add_subscription_nonce'),
+      'loading_text' => 'Добавляем в корзину...',
+      'error_text' => 'Произошла ошибка. Попробуйте еще раз.'
+    ));
+  }
+}
+add_action('wp_enqueue_scripts', 'enqueue_subscription_scripts');
+?>
 
 
 

@@ -111,6 +111,7 @@ get_header(); ?>
               <img src="<?php echo get_template_directory_uri(); ?>/images/partner.png" alt="Partner 4">
             </div>
           </div>
+          <div class="swiper-scrollbar"></div>
 
         </div>
       </div>
@@ -119,7 +120,7 @@ get_header(); ?>
   <article class="subscribe">
     <div class="container container_subscribe">
       <div class="subscribe_left">
-        <img src="<?php echo get_template_directory_uri(); ?>./images/subscribe-bg.png">
+        <img src="<?php echo get_template_directory_uri(); ?>/images/subscribe-bg.png">
       </div>
       <div class="subscribe_right">
         <div class="subscribe_content">

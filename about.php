@@ -59,7 +59,7 @@ get_header(); ?>
       </div>
     </div>
   </section>
-  <div class="container"><span class="sepparator"></span></div>
+  <div class="container"><span class="sepparator-about"></span></div>
   <section class="about_born">
     <div class="container container_born">
       <div class="about_born-left">
@@ -106,7 +106,7 @@ get_header(); ?>
   <article class="subscribe subscribe_article">
     <div class="container container_subscribe">
       <div class="subscribe_left">
-        <img src="<?php echo get_template_directory_uri(); ?>./images/subscribe-bg.png">
+        <img src="<?php echo get_template_directory_uri(); ?>/images/subscribe-bg.png">
       </div>
       <div class="subscribe_right">
         <div class="subscribe_content">

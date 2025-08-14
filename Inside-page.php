@@ -127,7 +127,7 @@ get_header(); ?>
       <div class="formalize_price">
         3000 ₽
       </div>
-      <button class="button_formalize button">
+      <button class="button_formalize button" type="button" id="subscription-button">
         <span>Оформить</span>
       </button>
   </article>
