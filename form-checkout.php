@@ -1,16 +1,8 @@
 <?php
 
 /**
- * The template for displaying WooCommerce My Account page
- * 
  * /**
- * Template Name: Оформление заказа (кастом)
- * 
- *
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package go-brew
+ * Template Name: Оформление заказа 
  */
 
 if (!defined('ABSPATH')) {
@@ -24,148 +16,162 @@ get_header(); ?>
     <?php mytheme_breadcrumbs(); ?>
   </div>
 </article>
-<!-- 29 строка ваша почта -->
-<main id="primary" class="checkout_main">
-  <form action="https://formsubmit.co/your@email.com" method="POST">
-    <div class="container">
+<main id="primary" class="checkout-main">
+  <div class="container">
 
+    <div class="checkout-page">
+      <?php
+      // Проверяем, есть ли товары в корзине
+      if (WC()->cart->is_empty()) : ?>
+        <div class="checkout-empty-cart">
+          <h2><?php _e('Ваша корзина пуста', 'go-brew'); ?></h2>
+          <p><?php _e('Добавьте товары в корзину, чтобы продолжить оформление заказа.', 'go-brew'); ?></p>
+          <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="button button-primary">
+            <?php _e('Перейти в каталог', 'go-brew'); ?>
+          </a>
+        </div>
+      <?php else : ?>
 
-      <div class="checkout-page">
-        <?php
-        // Проверяем, есть ли товары в корзине
-        if (WC()->cart->is_empty()) : ?>
-          <div class="checkout-empty-cart">
-            <h2><?php _e('Ваша корзина пуста', 'go-brew'); ?></h2>
-            <p><?php _e('Добавьте товары в корзину, чтобы продолжить оформление заказа.', 'go-brew'); ?></p>
-            <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="button button-primary">
-              <?php _e('Перейти в каталог', 'go-brew'); ?>
-            </a>
-          </div>
-        <?php else : ?>
+        <div class="checkout-container">
+          <h1 class="checkout-main-title"><?php _e('Оформление заказа', 'go-brew'); ?></h1>
 
-          <div class="checkout-container">
-            <h1 class="checkout-main-title"><?php _e('Оформление заказа', 'go-brew'); ?></h1>
+          <div class="checkout-content">
+            <?php
+            // Показать уведомления WooCommerce
+            if (function_exists('wc_print_notices')) {
+              wc_print_notices();
+            }
+            ?>
 
-            <div class="checkout-content">
-              <?php
-              // Показать уведомления WooCommerce
-              if (function_exists('wc_print_notices')) {
-                wc_print_notices();
-              }
-              ?>
+            <form name="checkout" method="post" class="checkout woocommerce-checkout"
+              action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
 
-              <form name="checkout" method="post" class="checkout woocommerce-checkout"
-                action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
-
-                <!-- Шаг 1: Корзина -->
-                <div class="checkout-step checkout-step-cart" id="checkout-step-01">
-                  <div class="checkout-step-header">
-                    <div class="checkout-step-number">01</div>
-                    <h2 class="checkout-step-title"><?php _e('Корзина', 'go-brew'); ?></h2>
-                  </div>
-
-                  <div class="checkout-cart-items">
-                    <?php
-                    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-                      $product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-                      $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-
-                      if ($product && $product->exists() && $cart_item['quantity'] > 0) :
-                    ?>
-                        <div class="checkout-cart-item">
-                          <div class="cart-item-container-left">
-                            <div class="cart-item-image">
-                              <?php
-                              $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $product->get_image(), $cart_item, $cart_item_key);
-                              if (!$product->is_visible()) {
-                                echo $thumbnail;
-                              } else {
-                                printf('<a href="%s">%s</a>', esc_url($product->get_permalink($cart_item)), $thumbnail);
-                              }
-                              ?>
-                            </div>
-                            <div class="cart-item-details">
-                              <h3 class="cart-item-name">
-                                <?php echo apply_filters('woocommerce_cart_item_name', $product->get_name(), $cart_item, $cart_item_key); ?>
-                              </h3>
-                              <p class="cart-item-description">
-                                <?php echo wp_trim_words($product->get_description(), 50); ?>
-                              </p>
-                            </div>
-                          </div>
-                          <div class="cart-item-container-center">
-                            <div class="cart-item-cost-name">
-                              <?php _e('Стоимость', 'go-brew'); ?>
-                            </div>
-                            <div class="cart-item-price">
-                              <div class="cart-item-cost">
-                                <span
-                                  class="cart-item-total"><?php echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($product, $cart_item['quantity']), $cart_item, $cart_item_key); ?></span>
-                              </div>
-                              <div class="cart-item-quantity">
-                                <?php _e('Количество:', 'go-brew'); ?> <?php echo $cart_item['quantity']; ?>
-                              </div>
-                            </div>
-                            <a href="<?php echo esc_url(wc_get_cart_remove_url($cart_item_key)); ?>" class="remove-cart-item">
-                              <div class="item-remove-text"><?php _e('Очистить корзину', 'go-brew'); ?></div>
-                            </a>
-                          </div>
-                          <div class="cart-item-container-right">
-                            <div class="checkout_form-com">
-                              Комментарий
-                            </div>
-                            <input class="checkout_form-field-com" type="text" placeholder="Комментарий к заказу"
-                              name="Комментарий к заказу">
-                          </div>
-                        </div>
-                    <?php
-                      endif;
-                    }
-                    ?>
-                  </div>
+              <!-- Шаг 1: Корзина -->
+              <div class="checkout-step  checkout-step-cart" id="checkout-step-01">
+                <div class="checkout-step-header">
+                  <div class="checkout-step-number">01</div>
+                  <h2 class="checkout-step-title"><?php _e('Корзина', 'go-brew'); ?></h2>
                 </div>
 
+                <div class="checkout-cart-items">
+                  <?php
+                  foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                    $product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+                    $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
 
-              </form>
-            </div>
-          </div>
-        <?php endif; ?>
-      </div>
-    </div>
-    <!-- Шаг 2: Оформление заказа -->
-    <div class="cointainer_bg">
-      <div class="container">
-        <div class="checkout-step checkout-step-details" id="checkout-step-02">
-          <div class="checkout-step-header">
-            <div class="checkout-step-number">02</div>
-            <h2 class="checkout-step-title"><?php _e('Оформление заказа', 'go-brew'); ?></h2>
-          </div>
-          <div class="checkout_form-grid">
-            <div class="checkout_form-grid-item">
-              <input class="checkout_form-field" placeholder="Имя" type="text" name="Имя" required>
-              <input class="checkout_form-field" placeholder="E-mail" type="email" name="E-mail" required>
-            </div>
-            <div class="checkout_form-grid-item">
-              <input class="checkout_form-field" placeholder="Фамилия" type="text" name="Фамилия" required>
-              <input class="checkout_form-field" placeholder="+7 (910) 222-78-11" type="tel" name="Телефон" required>
-            </div>
-          </div>
-          <div class="checkout_form-another">
-            <div class="checkout_form-another-top">
-              <div class="checkout_form-another-title">Другой получатель</div>
-              <input type="checkbox" name="Другой получатель" />
-            </div>
-            <div class="checkout_form-another-grid">
-              <input class="checkout_form-field" placeholder="Имя" type="text" name="Имя" required>
-              <input class="checkout_form-field" placeholder="Фамилия" type="text" name="Фамилия" required>
-              <input class="checkout_form-field" placeholder="+7 (910) 222-78-11" type="tel" name="Телефон" required>
+                    if ($product && $product->exists() && $cart_item['quantity'] > 0) :
+                  ?>
+                      <div class="checkout-cart-item">
+                        <div class="cart-item-container-left">
+                          <div class="cart-item-image">
+                            <?php
+                            $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $product->get_image(), $cart_item, $cart_item_key);
+                            if (!$product->is_visible()) {
+                              echo $thumbnail;
+                            } else {
+                              printf('<a href="%s">%s</a>', esc_url($product->get_permalink($cart_item)), $thumbnail);
+                            }
+                            ?>
+                          </div>
+                          <div class="cart-item-details">
+                            <h3 class="cart-item-name">
+                              <?php echo apply_filters('woocommerce_cart_item_name', $product->get_name(), $cart_item, $cart_item_key); ?>
+                            </h3>
+                            <p class="cart-item-description">
+                              <?php echo wp_trim_words($product->get_description(), 50); ?>
+                            </p>
+                          </div>
+                        </div>
+                        <div class="cart-item-container-center">
+                          <div class="cart-item-cost-name">
+                            <?php _e('Стоимость', 'go-brew'); ?>
+                          </div>
+                          <div class="cart-item-price">
+                            <div class="cart-item-cost">
+                              <span
+                                class="cart-item-total"><?php echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($product, $cart_item['quantity']), $cart_item, $cart_item_key); ?></span>
+                            </div>
+                            <div class="cart-item-quantity">
+                              <?php _e('Количество:', 'go-brew'); ?> <?php echo $cart_item['quantity']; ?>
+                            </div>
+                          </div>
+                          <a href="<?php echo esc_url(wc_get_cart_remove_url($cart_item_key)); ?>" class="remove-cart-item">
+                            <div class="item-remove-text"><?php _e('Очистить корзину', 'go-brew'); ?></div>
+                          </a>
+                        </div>
+                        <div class="cart-item-container-right">
+                          <div class="checkout_form-com">
+                            Комментарий
+                          </div>
 
-            </div>
-          </div>
-        </div>
+                          <textarea rows="4" class="checkout_form-field-com" type="text" placeholder="Комментарий к заказу"
+                            name="Комментарий к заказу"></textarea>
+                        </div>
+                      </div>
+                  <?php
+                    endif;
+                  }
+                  ?>
+                </div>
+              </div>
 
-        <!-- Шаг 3: Способ доставки -->
-        <div class="container padding60">
+              <!-- Шаг 2: Оформление заказа -->
+              <div class="checkout-step full-width-bg checkout-step-details" id="checkout-step-02">
+                <div class="checkout-step-header">
+                  <div class="checkout-step-number">02</div>
+                  <h2 class="checkout-step-title"><?php _e('Оформление заказа', 'go-brew'); ?></h2>
+                </div>
+
+                <div class="checkout-billing-fields">
+                  <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
+                    <?php do_action('woocommerce_checkout_shipping'); ?>
+                  <?php endif; ?>
+
+                  <div class="checkout-form-row">
+                    <div class="checkout-form-col checkout-form-col-left">
+                      <?php
+                      $fields = WC()->checkout->get_checkout_fields('billing');
+                      foreach ($fields as $key => $field) {
+                        if ($key === 'billing_first_name' || $key === 'billing_last_name') {
+                          woocommerce_form_field($key, $field, WC()->checkout->get_value($key));
+                        }
+                      }
+                      ?>
+                    </div>
+                    <div class="checkout-form-col checkout-form-col-right">
+                      <?php
+                      foreach ($fields as $key => $field) {
+                        if ($key === 'billing_email' || $key === 'billing_phone') {
+                          woocommerce_form_field($key, $field, WC()->checkout->get_value($key));
+                        }
+                      }
+                      ?>
+                    </div>
+                  </div>
+
+                  <div class="checkout-additional-fields">
+
+
+                    <div class="checkout_form-another-top">
+                      <div class="checkout_form-another-title">Другой получатель</div>
+                      <input type="checkbox" name="Другой получатель" />
+                    </div>
+                    <div class="checkout_form-another-grid">
+                      <input type="text" name="other_recipient" placeholder="<?php _e('Имя', 'go-brew'); ?>"
+                        class="checkout-input">
+                      <input type="text" name="other_recipient_last_name" placeholder="<?php _e('Фамилия', 'go-brew'); ?>"
+                        class="checkout-input">
+                      <input type="text" name="other_recipient_phone" placeholder="<?php _e('Телефон', 'go-brew'); ?>"
+                        class="checkout-input">
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <!-- Шаг 3: Способ доставки -->
           <div class="checkout-step checkout-step-delivery" id="checkout-step-03">
             <div class="checkout-step-header">
               <div class="checkout-step-number">03</div>
@@ -178,56 +184,54 @@ get_header(); ?>
                   <?php wc_cart_totals_shipping_html(); ?>
                 </div>
               <?php endif; ?>
-            </div>
 
-            <!-- Дропдаун выбора доставки -->
-            <div class="checkout-delivery-dropdown">
-              <select name="delivery_method" class="checkout-select">
-                <option value=""><?php _e('Выбор доставки', 'go-brew'); ?></option>
-                <option value="pickup"><?php _e('Самовывоз', 'go-brew'); ?></option>
-                <option value="courier"><?php _e('Курьерская доставка', 'go-brew'); ?></option>
-                <option value="post"><?php _e('Почта России', 'go-brew'); ?></option>
-              </select>
+              <!-- Дропдаун выбора доставки -->
+              <div class="checkout-delivery-dropdown">
+                <?php
+                $cities = get_option('delivery_cities');
+                $cities_list = array_filter(array_map('trim', explode("\n", $cities)));
+                ?>
+
+                <select name="delivery_method" class="checkout-select">
+                  <option value=""><?php _e('Выбор города', 'go-brew'); ?></option>
+                  <?php foreach ($cities_list as $city): ?>
+                    <option value="<?php echo sanitize_title($city); ?>"><?php echo esc_html($city); ?></option>
+                  <?php endforeach; ?>
+                </select>
+
+
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Шаг 4: Способ оплаты -->
-        <div class="cointainer_bg">
-          <div class="container padding60">
-            <div class="checkout-step checkout-step-payment" id="checkout-step-04">
-              <div class="checkout-step-header">
-                <div class="checkout-step-number">04</div>
-                <h2 class="checkout-step-title"><?php _e('Способ оплаты', 'go-brew'); ?></h2>
-              </div>
+          <!-- Шаг 4: Способ оплаты -->
+          <div class="checkout-step full-width-bg checkout-step-payment" id="checkout-step-04">
+            <div class="checkout-step-header">
+              <div class="checkout-step-number">04</div>
+              <h2 class="checkout-step-title"><?php _e('Способ оплаты', 'go-brew'); ?></h2>
+            </div>
 
-              <div class="checkout-payment-methods">
-                <?php if (WC()->payment_gateways()->get_available_payment_gateways()) : ?>
-                  <div id="payment" class="woocommerce-checkout-payment">
-                    <div class="checkout-payment-options">
-                      <div class="payment-method-card active" data-method="card">
-                        <span class="payment-method-label"><?php _e('Банковская карта', 'go-brew'); ?></span>
-                      </div>
-                      <div class="payment-method-card" data-method="cash">
-                        <span class="payment-method-label"><?php _e('Наличными', 'go-brew'); ?></span>
-                      </div>
-                      <div class="payment-method-card" data-method="sbp">
-                        <span class="payment-method-label"><?php _e('СБП', 'go-brew'); ?></span>
-                      </div>
-                      <div class="payment-method-card" data-method="online">
-                        <span class="payment-method-label"><?php _e('Оплата онлайн', 'go-brew'); ?></span>
-                      </div>
+            <div class="checkout-payment-methods">
+              <?php if (WC()->payment_gateways()->get_available_payment_gateways()) : ?>
+                <div id="payment" class="woocommerce-checkout-payment">
+                  <div class="checkout-payment-options">
+                    <div class="payment-method-card active" data-method="card">
+                      <span class="payment-method-label"><?php _e('Банковская карта', 'go-brew'); ?></span>
                     </div>
-                    <?php do_action('woocommerce_checkout_payment'); ?>
+                    <div class="payment-method-card" data-method="sbp">
+                      <span class="payment-method-label"><?php _e('СБП', 'go-brew'); ?></span>
+                    </div>
+                    <div class="payment-method-card" data-method="online">
+                      <span class="payment-method-label"><?php _e('Оплата онлайн', 'go-brew'); ?></span>
+                    </div>
                   </div>
-                <?php endif; ?>
-              </div>
+                  <?php do_action('woocommerce_checkout_payment'); ?>
+                </div>
+              <?php endif; ?>
             </div>
           </div>
-        </div>
 
-        <!-- Шаг 5: Завершить оформление -->
-        <div class="container">
+          <!-- Шаг 5: Завершить оформление -->
           <div class="checkout-step checkout-step-complete" id="checkout-step-05">
             <div class="checkout-step-header">
               <div class="checkout-step-number">05</div>
@@ -235,13 +239,13 @@ get_header(); ?>
             </div>
 
             <div class="checkout-order-review">
-              <div class="checkout-promo-code">
-                <input type="text" name="coupon_code" placeholder="<?php _e('Введите номер купона', 'go-brew'); ?>"
-                  class="checkout-input">
-                <button type="button" class="checkout-promo-btn"><?php _e('Применить', 'go-brew'); ?></button>
-              </div>
 
               <div class="checkout-order-totals">
+                <div class="checkout-promo-code">
+                  <input type="text" name="coupon_code" placeholder="<?php _e('Введите номер купона', 'go-brew'); ?>"
+                    class="checkout-input">
+                  <button type="button" class="checkout-promo-btn"><?php _e('Применить', 'go-brew'); ?></button>
+                </div>
                 <div class="checkout-totals-row">
                   <span class="checkout-totals-label"><?php _e('Сумма заказа', 'go-brew'); ?></span>
                   <span class="checkout-totals-value"><?php echo WC()->cart->get_subtotal(); ?> ₽</span>
@@ -254,22 +258,26 @@ get_header(); ?>
                   <span class="checkout-totals-label"><?php _e('К оплате', 'go-brew'); ?></span>
                   <span class="checkout-totals-value"><?php echo WC()->cart->get_total(); ?></span>
                 </div>
-              </div>
+                <div class="checkout-submit-wrapper">
+                  <button type="submit" class="checkout-submit-btn button" name="woocommerce_checkout_place_order"
+                    id="place_order" value="<?php esc_attr_e('Купить', 'go-brew'); ?>">
+                    <?php _e('Купить', 'go-brew'); ?>
+                  </button>
 
-              <div class="checkout-submit-wrapper">
-                <button type="submit" class="checkout-submit-btn button" name="woocommerce_checkout_place_order"
-                  id="place_order" value="<?php esc_attr_e('Оплатить', 'go-brew'); ?>">
-                  <?php _e('Оплатить', 'go-brew'); ?>
-                </button>
-
-                <div class="checkout-privacy-notice">
-                  <?php _e('Нажимая на кнопку, вы соглашаетесь с условиями обработки персональных данных и пользовательским соглашением', 'go-brew'); ?>
+                  <div class="checkout-privacy-notice">
+                    <?php _e('Я согласен на обработку моих персональных данных и ознакомлен с <a class="public_link" href="#" target="_blank" rel="noopener noreferrer">публичной офертой</a>.', 'go-brew'); ?>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
+          </form>
         </div>
-  </form>
+    </div>
+  <?php endif; ?>
+  </div>
+  </div>
 </main>
 
 

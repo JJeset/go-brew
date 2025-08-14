@@ -1055,6 +1055,79 @@ function remove_woocommerce_styles_on_cart()
 }
 add_action('wp_enqueue_scripts', 'remove_woocommerce_styles_on_cart', 99);
 
+// выбор города 
+// Регистрируем страницу настроек
+add_action('admin_menu', function () {
+  add_options_page(
+    'Настройки городов', // Заголовок страницы
+    'Города доставки',   // Название в меню
+    'manage_options',    // Права доступа
+    'delivery-cities',   // slug
+    'render_delivery_cities_settings' // функция вывода
+  );
+});
+
+// Регистрируем опцию
+add_action('admin_init', function () {
+  register_setting('delivery_cities_group', 'delivery_cities');
+});
+
+// Вывод страницы настроек
+function render_delivery_cities_settings()
+{
+?>
+  <div class="wrap">
+    <h1>Список городов доставки</h1>
+    <form method="post" action="options.php">
+      <?php settings_fields('delivery_cities_group'); ?>
+      <?php do_settings_sections('delivery_cities_group'); ?>
+      <textarea name="delivery_cities" rows="10" cols="50"
+        class="large-text"><?php echo esc_textarea(get_option('delivery_cities')); ?></textarea>
+      <p class="description">Введите города построчно. Пример:<br>Москва<br>Санкт-Петербург<br>Новосибирск</p>
+      <?php submit_button(); ?>
+    </form>
+  </div>
+<?php
+}
+
+// Добавляем поле выбора города на страницу оформления заказа
+add_action('woocommerce_after_order_notes', function ($checkout) {
+  $cities = get_option('delivery_cities');
+  $cities_list = array_filter(array_map('trim', explode("\n", $cities)));
+?>
+  <p class="form-row form-row-wide">
+    <label for="delivery_city"><?php _e('Выбор города', 'go-brew'); ?> <span class="required">*</span></label>
+    <select name="delivery_city" id="delivery_city" class="checkout-select">
+      <option value=""><?php _e('Выберите город', 'go-brew'); ?></option>
+      <?php foreach ($cities_list as $city): ?>
+        <option value="<?php echo esc_attr($city); ?>"><?php echo esc_html($city); ?></option>
+      <?php endforeach; ?>
+    </select>
+  </p>
+<?php
+});
+
+
+add_action('woocommerce_checkout_process', function () {
+  if (empty($_POST['delivery_city'])) {
+    wc_add_notice(__('Пожалуйста, выберите город доставки.'), 'error');
+  }
+});
+
+add_action('woocommerce_checkout_update_order_meta', function ($order_id) {
+  if (!empty($_POST['delivery_city'])) {
+    update_post_meta($order_id, 'delivery_city', sanitize_text_field($_POST['delivery_city']));
+  }
+});
+
+
+add_action('woocommerce_admin_order_data_after_billing_address', function ($order) {
+  $city = get_post_meta($order->get_id(), 'delivery_city', true);
+  if ($city) {
+    echo '<p><strong>' . __('Город доставки', 'go-brew') . ':</strong> ' . esc_html($city) . '</p>';
+  }
+});
+
 
 
 ?>
