@@ -633,7 +633,6 @@ a:visited {}
 a:hover,
 a:focus,
 a:active {
-  color: #191970;
   transform: translateY(-1px);
 }
 
@@ -1784,13 +1783,14 @@ textarea {
 }
 
 .subscribe_left img {
+  aspect-ratio: 670/369;
   height: 100%;
 }
 
 .subscribe_left {
   margin-left: -100px;
   height: 100%;
-  margin-bottom: -4px;
+  margin-bottom: -3px;
 }
 
 .subscribe_right {
@@ -2589,7 +2589,7 @@ footer {
   content: url('./images/arrow.svg');
   position: absolute;
   right: 5px;
-  top: 3px;
+  top: 4px;
   padding: 13px;
   background-color: #FFB8B3;
   border-radius: 30px;
